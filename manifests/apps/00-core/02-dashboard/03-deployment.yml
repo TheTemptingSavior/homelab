@@ -1,0 +1,33 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dashboard
+  namespace: dashboard
+spec:
+  selector:
+    matchLabels:
+      name: dashboard
+  template:
+    metadata:
+      labels:
+        name: dashboard
+    spec:
+      containers:
+      - name: dashboard
+        image: b4bz/homer:v22.10.1
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - mountPath: /www/assets/config.yml
+          name: config-file
+          readOnly: true
+          subPath: config.yml
+      volumes:
+      - name: config-file
+        configMap:
+          name: dashboard-config
+          items:
+          - key: config.yml
+            path: config.yml

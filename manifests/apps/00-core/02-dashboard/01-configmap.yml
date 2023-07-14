@@ -1,0 +1,120 @@
+---
+# Source: authelia/templates/configMap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dashboard-config
+  namespace: dashboard
+data:
+  config.yml: |
+    ---
+    title: "Codekernel"
+    subtitle: "Homelab Dashboard"
+
+    header: true
+    defaults:
+      layout: columns
+      colorTheme: dark
+
+    message:
+      style: "is-warning"
+      title: "Under Development"
+      icon: "fa fa-exclamation-triangle"
+      content: "Hello World From This Alert"
+
+    links:
+      - name: "Link 1"
+        icon: "fab fa-github"
+        url: "https://github.com/bastienwirtz/homer"
+        target: "_blank"
+      - name: "link 2"
+        icon: "fas fa-book"
+        url: "https://github.com/bastienwirtz/homer"
+
+
+    services:
+      - name: "Development"
+        icon: "fas fa-code-branch"
+        items:
+          - name: "Gitea"
+            icon: "fa fa-coffee"
+            subtitle: "Git with a cup of tea"
+            tag: "app"
+            url: "https://git.codekernel.co.uk"
+            target: "_blank"
+          - name: "Snippets"
+            icon: "fa fa-code"
+            subtitle: "Code snippets"
+            tag: "app"
+            tagstyle: "is-success"
+            url: "https://snippets.codekernel.co.uk"
+            target: "_blank"
+          - name: "Drone"
+            icon: "fa fa-wrench"
+            subtitle: "CI/CD pipelines"
+            url: "https://drone.codekernel.co.uk"
+            tag: "app"
+            tagstyle: "is-success"
+            target: "_blank"
+          - name: "Kanboard"
+            icon: "fa fa-file"
+            subtitle: "Kanban your life"
+            url: "https://kanboard.codekernel.co.uk"
+            tag: "app"
+            tagstyle: "is-success"
+            target: "_blank"
+
+
+      - name: "Management"
+        icon: "fa fa-lock"
+        items:
+          - name: "Rancher"
+            subtitle: "K3S management dashboard"
+            icon: "fa fa-hashtag"
+            tag: "other"
+            tagstyle: "is-danger"
+            url: "https://rancher.codekernel.co.uk"
+            target: "_blank"
+          - name: "ArgoCD"
+            subtitle: "Declarative GitOps"
+            icon: "fa fa-code-fork"
+            tag: "other"
+            tagstyle: "is-danger"
+            url: "https://argocd.codekernel.co.uk"
+            target: "_blank"
+
+      - name: "Files"
+        icon: "fa fa-folder-open"
+        items:
+          - name: "Nextcloud"
+            subtitle: "File sync service"
+            icon: "fa fa-cloud"
+            tag: "app"
+            tagstyle: "is-danger"
+            url: "https://nextcloud.codekernel.co.uk"
+            target: "_blank"
+
+      - name: "Media"
+        icon: "fa fa-play"
+        items:
+          - name: "Lidarr"
+            subtitle: "Music manager"
+            icon: "fa fa-music"
+            tag: "media"
+            tagstyle: "is-warning"
+            url: "#"
+            target: "_blank"
+          - name: "Radarr"
+            subtitle: "Film manager"
+            icon: "fa fa-music"
+            tag: "media"
+            tagstyle: "is-warning"
+            url: "#"
+            target: "_blank"
+          - name: "Sonarr"
+            subtitle: "Series manager"
+            icon: "fa fa-music"
+            tag: "media"
+            tagstyle: "is-warning"
+            url: "#"
+            target: "_blank"
