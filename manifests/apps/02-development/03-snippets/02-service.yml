@@ -3,7 +3,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: snippets-service
-  namespace: gitea
+  namespace: snippets
 spec:
   selector:
     app: snippets
