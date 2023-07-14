@@ -37,7 +37,12 @@
     - /var/lib/kubelet
     - /var/lib/rancher/k3s
     - /var/lib/cni/networks/cbr0
+    - /var/lib/longhorn
 
 - name: daemon_reload
   systemd:
     daemon_reload: yes
+
+- name: Rebooting machines
+  ansible.builtin.reboot:
+    reboot_timeout: 180
