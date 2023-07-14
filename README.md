@@ -106,6 +106,28 @@ kubectl create secret generic drone-runner-secret \
   | kubeseal -o yaml > ./manifests/apps/02-development/02-drone/10-runner-secret-sealed.yml
 ```
 
+### Files
+
+#### Nextcloud
+
+```bash
+kubectl create secret generic mariadb-secret \
+    --output=yaml \
+    --dry-run=client \
+    --namespace=nextcloud \
+    --from-literal=MYSQL_PASSWORD=helloworld \
+    | kubeseal -o yaml > ./manifests/apps/03-files/01-nextcloud/03-mariadb-secret-sealed.yml
+```
+
+```bash
+kubectl create secret generic nextcloud-secret \
+    --output=yaml \
+    --dry-run=client \
+    --namespace=nextcloud \
+    --from-literal=MYSQL_PASSWORD=asdgoanoiwnioenvnaspdhpa \
+    | kubeseal -o yaml > ./manifests/apps/03-files/01-nextcloud/09-nextcloud-secret-sealed.yml
+```
+
 ## Notes
 
 ### Ansible Vault

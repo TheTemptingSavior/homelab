@@ -1,0 +1,36 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nextcloud
+  namespace: nextcloud
+  labels:
+    app: nextcloud
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nextcloud
+  template:
+    metadata:
+      labels:
+        app: nextcloud
+    spec:
+      containers:
+      - name: nextcloud
+        image: nextcloud:24.0.6-apache
+        envFrom:
+          - configMapRef:
+              name: nextcloud-config
+          - secretRef:
+              name: nextcloud-secret
+        ports:
+        - containerPort: 80
+          name: http
+        volumeMounts:
+        - mountPath: /var/www/html
+          name: nextcloud-data
+      volumes:
+      - name: nextcloud-data
+        persistentVolumeClaim:
+          claimName: nextcloud-data-pvc
