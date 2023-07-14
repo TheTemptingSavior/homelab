@@ -1,0 +1,54 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: system
+  namespace: argocd
+  # Finalizer that ensures that project is not deleted until it is not referenced by any
+  # application
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  description: Core system applications
+  clusterResourceWhitelist:
+  - group: '*'
+    kind: '*'
+  destinations:
+  - namespace: '*'
+    server: '*'
+  sourceRepos:
+  - '*'
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: rancher
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: cattle-system
+    server: https://kubernetes.default.svc
+  project: system
+  source:
+    path: manifests/system/01-rancher
+    repoURL: https://
+    targetRevision: HEAD
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: longhorn
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: longhorn-system
+    server: https://kubernetes.default.svc
+  project: system
+  source:
+    path: manifests/system/02-longhorn
+    repoURL: https://
+    targetRevision: HEAD
