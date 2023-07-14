@@ -68,3 +68,19 @@ spec:
     path: manifests/apps/02-development/01-gitea
     repoURL: https://
     targetRevision: HEAD
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: snippets
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+  project: development
+  source:
+    path: manifests/apps/02-development/03-snippets
+    repoURL: https://
+    targetRevision: HEAD
