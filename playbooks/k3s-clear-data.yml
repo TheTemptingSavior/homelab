@@ -6,17 +6,15 @@
   become: true
   vars_files:
     - ../roles/k3s/d_glusterfs/defaults/main.yml
+  vars_prompt:
+    - name: _user_input
+      prompt: "Are you sure you wish to continue? (yes/no)"
+      private: false
   tasks:
-    - name: "Confirm action"
-      ansible.builtin.pause:
-        prompt: "Are you sure you wish to continue? (yes/no)"
-        echo: "yes"
-      register: _user_input
-
     - name: "Fail if user unsure"
       ansible.builtin.fail:
         msg: "You must type 'yes' to continue this playbook"
-      when: _user_input.user_input == "yes"
+      when: _user_input != "yes"
 
     - name: "Find existing files"
       ansible.builtin.find:
