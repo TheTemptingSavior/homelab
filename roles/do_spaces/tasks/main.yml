@@ -1,0 +1,46 @@
+---
+
+- name: "Install packages"
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: "latest"
+  with_items: "{{ required_packages }}"
+
+- name: "Ensure rclone config directory exists"
+  ansible.builtin.file:
+    path: "/home/{{ ansible_user }}/.config/rclone"
+    state: "directory"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0775"
+
+- name: "Template the rclone conf file"
+  ansible.builtin.template:
+    src: "rclone.conf.j2"
+    dest: "/home/{{ ansible_user }}/.config/rclone/rclone.conf"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0664"
+
+- name: "Template over rclone service file"
+  ansible.builtin.template:
+    src: "rclone_service.j2"
+    dest: "/etc/systemd/system/rclone.service"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+
+- name: "Ensure rclone mount point exists"
+  ansible.builtin.file:
+    path: "/dospace"
+    state: "directory"
+    owner: "root"
+    group: "root"
+    mode: "0755"
+
+- name: "Enable rclone service"
+  ansible.builtin.systemd:
+    name: "rclone.service"
+    state: "started"
+    daemon_reload: true
+    enabled: true

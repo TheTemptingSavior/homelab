@@ -1,5 +1,9 @@
 ---
 
+- name: "Interfaces"
+  ansible.builtin.debug:
+    msg: "{{ ansible_interfaces }}"
+
 - name: "Determine is_server install"
   ansible.builtin.set_fact:
     is_server: false

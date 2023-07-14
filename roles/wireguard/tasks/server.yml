@@ -35,3 +35,4 @@
   ansible.builtin.command: wg-quick up wg0
   register: _wireguard_up
   changed_when: _wireguard_up.rc == 0
+  when: "'wg0' not in ansible_interfaces | join(',')"

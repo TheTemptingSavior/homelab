@@ -7,3 +7,4 @@
   roles:
     - role: ../roles/upgrade_system
     - { role: ../roles/wireguard, is_server: true }
+    - { role: ../roles/do_spaces }

@@ -1,0 +1,18 @@
+[digitalocean]
+type = s3
+provider = DigitalOcean
+env_auth = false
+access_key_id = {{ rclone_details.access_key_id }}
+secret_access_key = {{ rclone_details.secret_access_key }}
+region = fra1
+endpoint = fra1.digitaloceanspaces.com
+location_constraint = fra1
+acl = private
+
+[secret]
+type = crypt
+remote = digitalocean:theredkingdom
+filename_encryption = standard
+directory_name_encryption = true
+password = {{ rclone_details.password }}
+password2 = {{ rclone_details.password2 }}
