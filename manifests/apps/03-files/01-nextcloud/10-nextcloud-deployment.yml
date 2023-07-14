@@ -30,7 +30,14 @@ spec:
         volumeMounts:
         - mountPath: /var/www/html
           name: nextcloud-data
+        - mountPath: /mnt/music
+          name: jellyfin-music
       volumes:
       - name: nextcloud-data
         hostPath:
           path: /mnt/gluster/gluster/files/nextcloud/nextcloud-data
+      - name: jellyfin-music
+        nfs:
+          server: 192.168.57.2
+          path: /mnt/user/media/Music
+          readOnly: true
