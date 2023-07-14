@@ -35,5 +35,5 @@ spec:
           name: archivebox-data
       volumes:
       - name: archivebox-data
-        persistentVolumeClaim:
-          claimName: archivebox-pvc
+        hostPath:
+          path: /mnt/gluster/gluster/files/archivebox
