@@ -43,6 +43,20 @@ cluster, [Longhorn](https://github.com/longhorn/longhorn) for persistent, highly
 The monitoring stack is a modified version of `prometheus-community/kube-prometheus-stack` specifically to tie in well
 with the Rancher management system.
 
+### Core
+
+#### Authelia
+```bash
+kubectl create secret generic authelia-secret \
+  --output=yaml \
+  --dry-run=client \
+  --namespace=authelia \
+  --from-literal=JWT_TOKEN=helloworld \
+  --from-literal=SESSION_ENCRYPTION_KEY=helloworld \
+  --from-literal=STORAGE_ENCRYPTION_KEY=helloworld \
+  | kubeseal -o yaml > ./manifests/apps/00-core/01-authelia/02-sealed-secret.yml
+```
+
 ### Development
 
 #### Gitea
