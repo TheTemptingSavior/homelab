@@ -1,0 +1,7 @@
+---
+
+- name: "Login to Digital Ocean Docker registry"
+  community.docker.docker_login:
+    registry_url: "registry.digitalocean.com"
+    username: "{{ do_registry_token }}"
+    password: "{{ do_registry_token }}"

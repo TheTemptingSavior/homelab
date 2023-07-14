@@ -8,3 +8,6 @@ packages:
   - "nfs-common"
   - "net-tools"
   - "dnsutils"
+
+pip_packages:
+  - "docker"

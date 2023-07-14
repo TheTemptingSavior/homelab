@@ -3,6 +3,8 @@
 ## Notes
 - Chosen `flannel` backend is `host-gw`. This is because there are known issues with the `externalTrafficPolicy` being
   set to `local` when using `ingress-nginx` and getting the real IPs of remote clients
+- GlusterFS is the chosen distributed storage for the K3S gluster
+
 
 ## Usage
 
@@ -236,6 +238,7 @@ The encrypted variables in the vars file can be created with the following
 ```bash
  ansible master \
       --vault-password-file=.vault-password \
+      --extra-vars "@roles/k3s/k3s_yaml/sealed_secrets/defaults/main.yml" \
       -i ./inventory/homelab/hosts.ini \
       -m debug \
       -a 'var=sealed_secrets_crt'

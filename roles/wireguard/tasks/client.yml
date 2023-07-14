@@ -1,0 +1,23 @@
+---
+
+- name: "Set default allowed IPs (if required)"
+  ansible.builtin.set_fact:
+    client_allowed_ips: "{{ _client_default_ips }}"
+  when: client_allowed_ips is not defined
+
+- name: "Fail if client name not if client list"
+  ansible.builtin.fail:
+    msg: "Client name must be one of {{ clients.keys() | list }}"
+  when: client_name is not defined or client_name not in clients.keys() | list
+
+- name: "Grab the relevant client config"
+  ansible.builtin.set_fact:
+    client_data: clients[client_name]
+
+- name: "Template client config file"
+  ansible.builtin.template:
+    src: "client_config.j2"
+    dest: "/etc/wireguard/wg0.conf"
+    owner: "root"
+    group: "root"
+    mode: "0644"

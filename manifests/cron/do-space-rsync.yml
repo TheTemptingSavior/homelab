@@ -1,4 +1,20 @@
 ---
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  creationTimestamp: null
+  name: rclone-conf
+  namespace: cron-jobs
+spec:
+  encryptedData:
+    rclone.conf: AgAU+RKu4BqicLQPGnqPprjCAMN2lDPRudgFhxGMxoDiSUJHExhcYEmwa0XdBmeUxLFlXWPo00z+0u5KT1wurQeHOCK3dj+ztmk9xxVttgYFVPGFxrmdrnjoTeOEt8SzY4sAqKkNreomw+Dv76YVryq/rpXphDBgCQCi9RPS+BqjjNhPvX9nVmHHCLFPxWOGd5yFEb/57pOVmhhdgG8C1qONJvY7ifiEIghrD5qM/S2l5mlwQeLKJVtPAMDkJSyuOPxO1qBCHiQHGlF6ZMaMHYhg+/uFntCtYKty6cztnS8xHR7ajdokofD4BLvOHdIp/PXX3WUn94C9oTBp8vJgT9sPVhU0LdEQJ9ZiGZYKD0eQZ1mOpKpYmaEzD3MJLYuFEsatGVPEo+Lh8W/QNhawhvqsXDu8b/F0OlcNoTTJEi2nJ1KpcxMXvu998ZYUKKA/03MgDbEbx0Cas6ICg3jHbqTjGOXYc+A7ug/tKjcHhIbpleKrslYuUC+am7uP5msUDGpR95Wdj8c8Xj8U4DH0qNl89Gf0zPfDKK0qvtX9GM9+z3HsAv1hemJOS+zCk8owgYJaGQsEmp2V+DSCSYX0TNXImc68ED2pww1qrpq89dm/sgKDhDFZ2wQBXl+/pk9YS5Vzu7lTa+AnHIbOrd9TOM6BBIrYxcJ98jddEIwvM7HwOa8URBdCctxr47R4dX7slFUbp3BBr7s0C7EwrXioXzje95eKwYQPihbQivNt97SmkxizTh19SYPWia8QOurlGzA+5R/P7LNik6t/PLLI1vrbIzGGZqK0wq1iXh68ix/wdxKgsjp7sjElRi07XQFUqFV3YmaRFfA5T5G7xoZokZx/snN+2KkuDFde30oKEQd2TytME8d0bqZknUTDJ1ktXlUZFwH8d4vXoMu0RNU1nNVYenFrpz7sz//sJpPDhIX/DjI+EYK85Vm/NRCSSTUderZrLbnqRSjw+VE0XVFG8jK11zXipXUASBVUZk0aGzD7ziyPfZR5l+NHnk2Eq+brqHj8jpXF5cX+4bjFHUJnja71tsOwmblnJAaCErGJ6U2wBN5oNO8HNcW4qGtZEwUF7eczfjaUrc2PLKJf32vTRIE4ukbtYCh88GogDxRCSWbYsRsZG4M1jrDtYF0R2kV0ZCHU/45Wpi5V9oaEgInRl7aHzMuVFS2xtsmxK2aobhCTYduEUhHdLCZSSD4LLrYqyiJPY3YpJVipv20ji7z8dRBhKS6HmOqS0aBpCz5deLccR9rNP6x7oQTQpPONoUUbaZl9/rINDMDLjRnWHFgRvH6EIQOrV3NFUM0gZ7Mu5+zHe4hgfNuyJjNK7lMoCQtmoPYMfNyZiZqz9Gg2iif7ejb+VFVhOfB/MTjGQ1JZv1rmQLnH97b7MjakahM5Sr7lYXFOvINGZ+BmiwmuZEkiXn8NM0IgogA2T8GRzfrTfyiSMMZaVpEwwhbP8DGNNUEdLjMuuKRwcAK6AGSQtNqk7EXu0tIZBz2lK/NdUdKE7EiLvx6cSVJnFopEtLbhGCvFUn7IRgGyrX906YOj64uX4QwghZYWGEYvV1r9czGTT75w+LOGIK2PacP3JrZ4lOPmBaYUW3CBhabvPlRRu4RTnjBUQvYpdwynhKqilLgkFvA=
+  template:
+    data: null
+    metadata:
+      creationTimestamp: null
+      name: rclone-conf
+      namespace: cron-jobs
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -15,7 +31,30 @@ data:
     # Verify that we got our UnRAID mount point
     mountpoint /media && stat /media/Music
     
+    # Mount the Digital Ocean space
+    rclone --config=/rclone.conf \
+           --daemon \
+           --allow-other \
+           --cache-tmp-upload-path=/tmp/rclone/upload \
+           --cache-chunk-path=/tmp/rclone/chunks \
+           --cache-workers=8 \
+           --cache-writes \
+           --cache-dir=/tmp/rclone/vfs \
+           --cache-db-path=/tmp/rclone/db \
+           --no-modtime \
+           --drive-use-trash \
+           --stats=0 \
+           --checkers=16 \
+           --bwlimit=40M \
+           --dir-cache-time=60m \
+           --cache-info-age=60m \
+           secret:/ /dospace
     
+    # Sync the Music directories
+    rsync /media/Music /dospace/music/
+    
+    # Unmount the Digital Ocean space
+    /bin/fusermount -u /dospace
 ---
 apiVersion: batch/v1
 kind: CronJob
@@ -31,6 +70,11 @@ spec:
           containers:
             - name: do-space-rsync
               image: ubuntu:latest
+              securityContext:
+                privileged: true
+                capabilities:
+                  add:
+                    - SYS_ADMIN
               imagePullPolicy: always
               restartPolicy: OnFailure
               command:
@@ -43,7 +87,11 @@ spec:
                   subPath: script.sh
                 - mountPath: /media
                   name: media
+                - mountPath: /tmp/rclone
+                  name: rclone-temp
           volumes:
+            - name: rclone-temp
+              emptyDir: {}
             - name: backup-script
               configMap:
                 name: do-space-rsync-backup-script

@@ -9,17 +9,21 @@ server_private_key: !vault |
           6163356564366138640a316161326331343863326636656166306263336566336661386266623365
           66316639623535663532306265646361363162363739373232393066616138623363383532633933
           6161633233323264396136326435633666396639623635353364
-server_public_key: ""
+server_public_key: "TUym+Gh3P/0HMVXe73vsz8y5l5siWEc64+IOtgA67Rg="
 server_public_address: "{{ hostvars[groups['watchmen'][0]]['ansible_host'] | default(groups['watchmen'][0]) }}"
 server_address: 192.168.65.1/24
 server_port: 51820
 
+dns_address: 192.168.56.1
+
+_client_default_ips: "192.168.65.0/24,192.168.56.0/24,192.168.57.0/24,192.168.58.0/24,192.168.59.0/24"
 clients:
   opnsense:
     friendly_name: "OPNSense Home Router"
     public_key: "qFt6MFJdeVQiFUO5NgTJfeb/jUKJsgiKelt+5L+F8BE="
+    private_key: ""
+    address: "192.168.65.10/32"
     allowed_ips:
-      - "192.168.65.10/32"
       - "192.168.56.0/24"
       - "192.168.57.0/24"
       - "192.168.58.0/24"
@@ -27,10 +31,19 @@ clients:
   laptop:
     friendly_name: "Dell XPS 13 (2022)"
     public_key: "I4Vk8q2eotoIxDEkAjR/Dl+aDWtFLNgJuvvE7hZTQGU="
-    allowed_ips:
-      - "192.168.65.11/32"
+    private_key: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          31666636323065653533616662346563353766646334383562386164356161306432623961623832
+          6566323139326262393037313663613061323162306534330a326330653637333164666266633332
+          31373739393432303936623666303639376230303436666661636136636435646335303364373631
+          3539386239623230320a333266343762326230333239303639633463656262393734623465653137
+          33326261346438363137613137313330633635653134646632336165323265663766393464396333
+          3265323939306133663630383365623637326132346361373032
+    address: "192.168.65.11/32"
+    allowed_ips: []
   phone:
     friendly_name: "Samsung Galaxy S21 FE"
     public_key: "PhonE0JV1EzDR/m/jSI8ENUAOxfXSIYPpjTkGZXZ9Xg="
-    allowed_ips:
-      - "192.168.65.12/32"
+    private_key: ""
+    address: "192.168.65.12/32"
+    allowed_ips: []

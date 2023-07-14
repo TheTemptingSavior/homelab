@@ -27,7 +27,7 @@
       # {{ item.key }}: {{ item.value.friendly_name }}
       [Peer]
       PublicKey = {{ item.value.public_key }}
-      AllowedIPs = {{ item.value.allowed_ips | join(',') }}
+      AllowedIPs = {{ ([item.value.address] + item.value.allowed_ips) | join(',') }}
   with_items: "{{ clients | dict2items }}"
   no_log: true
 

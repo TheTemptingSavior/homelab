@@ -1,0 +1,42 @@
+---
+
+- name: "Delete all K3S data"
+  hosts: node
+  gather_facts: true
+  become: true
+  vars_files:
+    - ../roles/k3s/d_glusterfs/defaults/main.yml
+  tasks:
+    - name: "Confirm action"
+      ansible.builtin.pause:
+        prompt: "Are you sure you wish to continue? (yes/no)"
+        echo: "yes"
+      register: _user_input
+
+    - name: "Fail if user unsure"
+      ansible.builtin.fail:
+        msg: "You must type 'yes' to continue this playbook"
+      when: _user_input.user_input == "yes"
+
+    - name: "Find existing files"
+      ansible.builtin.find:
+        paths: "{{ gluster_mount_dir }}"
+      register: _found_files
+
+    - name: "Find existing files"
+      ansible.builtin.find:
+        paths: "{{ gluster_mount_dir }}"
+        file_type: directory
+      register: _found_directories
+
+    - name: "Delete K3S files"
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: absent
+      with_items: "{{ _found_files.files }}"
+
+    - name: "Delete K3S directories"
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: absent
+      with_items: "{{ _found_directories.files }}"

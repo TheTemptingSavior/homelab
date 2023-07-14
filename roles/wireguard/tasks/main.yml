@@ -25,3 +25,7 @@
 - name: "Include server config"
   ansible.builtin.include_tasks: server.yml
   when: is_server | bool
+
+- name: "Include client config"
+  ansible.builtin.include_tasks: client.yml
+  when: not is_server | bool

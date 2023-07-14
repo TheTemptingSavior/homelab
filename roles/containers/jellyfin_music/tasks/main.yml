@@ -18,7 +18,7 @@
   community.docker.docker_container:
     name: "jellyfin"
     image: "lscr.io/linuxserver/jellyfin"
-    start: "started"
+    state: "started"
     restart: true
     ports:
       - "8096:8096"

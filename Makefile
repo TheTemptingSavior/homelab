@@ -14,4 +14,4 @@ run:
 	ansible-playbook -i inventory/homelab/hosts.ini --vault-password-file=.vault-password playbooks/$(PLAYBOOK)
 
 test:
-	ansible-playbook -i inventory/test/hosts.ini --vault-password-file=.vault-password playbooks/$(PLAYBOOK)
+	ansible-playbook -i inventory/test/hosts.ini --limit=$(LIMIT) --vault-password-file=.vault-password playbooks/$(PLAYBOOK)
