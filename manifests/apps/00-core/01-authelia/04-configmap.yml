@@ -41,11 +41,7 @@ data:
       skew: 1
       secret_size: 32
     webauthn:
-      disable: false
-      display_name: Authelia
-      attestation_conveyance_preference: indirect
-      user_verification: preferred
-      timeout: 60s
+      disable: true
     ntp:
       address: time.cloudflare.com:123
       version: 4
@@ -54,10 +50,10 @@ data:
       disable_failure: false
     authentication_backend:
       password_reset:
-        disable: false
+        disable: true
         custom_url: ""
       file:
-        path: /config/users_database.yml
+        path: /users_database.yml
         password: 
           algorithm: sha512
           iterations: 100000
@@ -67,13 +63,13 @@ data:
           salt_length: 16
     password_policy:
       standard:
-        enabled: false
+        enabled: true
         min_length: 8
         max_length: 0
         require_uppercase: true
         require_lowercase: true
         require_number: true
-        require_special: true
+        require_special: false
       zxcvbn:
         enabled: false
         min_score: 0
@@ -84,6 +80,9 @@ data:
       expiration: 1h
       inactivity: 5m
       remember_me_duration: 1M
+      redis:
+        host: redis.authelia.svc.cluster.local
+        port: 6379
     regulation: 
       ban_time: 5m
       find_time: 2m
@@ -96,7 +95,7 @@ data:
       filesystem:
         filename: /config/notification.txt
     access_control:
-      default_policy: deny
+      default_policy: one_factor
       networks: 
       - name: private
         networks:
@@ -110,8 +109,28 @@ data:
       rules:
         - policy: bypass
           domain:
-            - 'codekernel.com'
+            - 'codekernel.co.uk'
         - policy: one_factor
           domain:
             - 'snippets.codekernel.co.uk'
+        - policy: bypass
+          domain: 'dash.codekernel.co.uk'
+          networks:
+            - private
+            - vpn
+  users_database.yml: |
+    # yamllint disable rule:line-length
+    ---
+    ###############################################################
+    #                         Users Database                      #
+    ###############################################################
+    users:
+      ethan:
+        displayname: "Ethan Cotterell"
+        email: "ethancotterell@gmail.com"
+        password: "$argon2id$v=19$m=65536,t=3,p=4$UXNNN1F4M1M4VWFtcHZnaQ$o2wtG+gJ1/+n+ee4TLr3iDgrK+iTu0VQDoy1iXGWH7M"
+        groups:
+          - admin
+          - dev
     ...
+    # yamllint enable rule:line-length

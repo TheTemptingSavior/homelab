@@ -51,10 +51,12 @@ kubectl create secret generic authelia-secret \
   --output=yaml \
   --dry-run=client \
   --namespace=authelia \
-  --from-literal=JWT_TOKEN=helloworld \
+  --from-literal=JWT_SECRET=helloworld \
+  --from-literal=SESSION_SECRET=helloworld \
+  --from-literal=STORAGE_PASSWORD=helloworld \
   --from-literal=SESSION_ENCRYPTION_KEY=helloworld \
   --from-literal=STORAGE_ENCRYPTION_KEY=helloworld \
-  | kubeseal -o yaml > ./manifests/apps/00-core/01-authelia/02-sealed-secret.yml
+  | kubeseal -o yaml > ./manifests/apps/00-core/01-authelia/05-sealed-secret.yml
 ```
 
 ### Development

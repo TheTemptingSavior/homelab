@@ -58,7 +58,7 @@ spec:
         - name: AUTHELIA_SERVER_DISABLE_HEALTHCHECK
           value: "true"
         - name: AUTHELIA_JWT_SECRET_FILE
-          value: /secrets/JWT_TOKEN
+          value: /secrets/JWT_SECRET
         - name: AUTHELIA_SESSION_SECRET_FILE
           value: /secrets/SESSION_ENCRYPTION_KEY
         - name: AUTHELIA_STORAGE_ENCRYPTION_KEY_FILE
@@ -104,6 +104,10 @@ spec:
           name: config-file
           readOnly: true
           subPath: configuration.yaml
+        - mountPath: /users_database.yml
+          name: config-file
+          readOnly: true
+          subPath: users_database.yml
         - mountPath: /secrets
           name: secrets
           readOnly: true
@@ -116,12 +120,14 @@ spec:
           items:
           - key: configuration.yaml
             path: configuration.yaml
+          - key: users_database.yml
+            path: users_database.yml
       - name: secrets
         secret:
-          secretName: authelia
+          secretName: authelia-secret
           items:
-          - key: JWT_TOKEN
-            path: JWT_TOKEN
+          - key: JWT_SECRET
+            path: JWT_SECRET
           - key: SESSION_ENCRYPTION_KEY
             path: SESSION_ENCRYPTION_KEY
           - key: STORAGE_ENCRYPTION_KEY

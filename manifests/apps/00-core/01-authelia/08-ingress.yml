@@ -13,6 +13,7 @@ metadata:
     helm.sh/chart: authelia-0.8.38
   annotations:
     kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
 spec:
   rules:
     - host: auth.codekernel.co.uk
