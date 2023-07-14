@@ -1,0 +1,15 @@
+---
+# Source: authelia/templates/configMap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vaultwarden-config
+  namespace: vaultwarden
+data:
+  DATA_FOLDER: "data"
+  DATABASE_URL: "data/db.sqlite3"
+  WEBSOCKET_ENABLED: "false"
+  LOG_FILE: "data/vaultwarden.log"
+  SIGNUPS_ALLOWED: "false"
+  DOMAIN: "https://vaultwarden.codekernel.co.uk"
+
