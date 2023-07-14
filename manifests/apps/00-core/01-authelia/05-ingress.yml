@@ -13,7 +13,6 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
 spec:
-  ingressClassName: ingress-nginx
   rules:
     - host: auth.codekernel.co.uk
       http:
