@@ -1,0 +1,37 @@
+---
+
+- name: "Output the wireguard server url"
+  ansible.builtin.debug:
+    msg: "Wireguard server URL: {{ server_public_address }}:{{ server_port }}"
+
+- name: "Template server config file"
+  ansible.builtin.template:
+    src: "server_config.j2"
+    dest: "/etc/wireguard/wg0.conf"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+
+- name: "Enable IPv4 forwarding"
+  ansible.posix.sysctl:
+    name: "net.ipv4.ip_forward"
+    value: "1"
+    state: "present"
+    reload: true
+
+- name: "Template client data"
+  ansible.builtin.blockinfile:
+    dest: /etc/wireguard/wg0.conf
+    marker: "\n# {mark} ANSIBLE MANAGED BLOCK"
+    block: |
+      # {{ item.key }}: {{ item.value.friendly_name }}
+      [Peer]
+      PublicKey = {{ item.value.public_key }}
+      AllowedIPs = {{ item.value.allowed_ips | join(',') }}
+  with_items: "{{ clients | dict2items }}"
+  no_log: true
+
+- name: "Start wireguard server"
+  ansible.builtin.command: wg-quick up wg0
+  register: _wireguard_up
+  changed_when: _wireguard_up.rc == 0

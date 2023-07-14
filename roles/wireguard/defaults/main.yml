@@ -1,0 +1,36 @@
+---
+
+is_server: true
+server_private_key: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          61353234653561656339646166323338643634363631393563666330393965646432666130376434
+          3763303033636563346564396435363335316631353563340a333338323164326231386631623661
+          30626537623234666537313264386234396362333165396562313639363261666462346364343862
+          6163356564366138640a316161326331343863326636656166306263336566336661386266623365
+          66316639623535663532306265646361363162363739373232393066616138623363383532633933
+          6161633233323264396136326435633666396639623635353364
+server_public_key: ""
+server_public_address: "{{ hostvars[groups['watchmen'][0]]['ansible_host'] | default(groups['watchmen'][0]) }}"
+server_address: 192.168.65.1/24
+server_port: 51820
+
+clients:
+  opnsense:
+    friendly_name: "OPNSense Home Router"
+    public_key: "qFt6MFJdeVQiFUO5NgTJfeb/jUKJsgiKelt+5L+F8BE="
+    allowed_ips:
+      - "192.168.65.10/32"
+      - "192.168.56.0/24"
+      - "192.168.57.0/24"
+      - "192.168.58.0/24"
+      - "192.168.59.0/24"
+  laptop:
+    friendly_name: "Dell XPS 13 (2022)"
+    public_key: "I4Vk8q2eotoIxDEkAjR/Dl+aDWtFLNgJuvvE7hZTQGU="
+    allowed_ips:
+      - "192.168.65.11/32"
+  phone:
+    friendly_name: "Samsung Galaxy S21 FE"
+    public_key: "PhonE0JV1EzDR/m/jSI8ENUAOxfXSIYPpjTkGZXZ9Xg="
+    allowed_ips:
+      - "192.168.65.12/32"

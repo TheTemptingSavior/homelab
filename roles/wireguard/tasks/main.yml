@@ -1,0 +1,23 @@
+---
+
+- name: "Determine is_server install"
+  ansible.builtin.set_fact:
+    is_server: true
+  when: is_server is not defined
+
+- name: "Install wireguard package"
+  ansible.builtin.apt:
+    name: "wireguard"
+    state: "present"
+
+- name: "Ensure correct permissions on wireguard config directory"
+  ansible.builtin.file:
+    path: "/etc/wireguard"
+    state: "directory"
+    owner: "root"
+    group: "root"
+    mode: "0700"
+
+- name: "Include server config"
+  ansible.builtin.include_tasks: server.yml
+  when: is_server | bool

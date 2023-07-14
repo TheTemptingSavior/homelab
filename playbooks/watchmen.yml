@@ -1,0 +1,9 @@
+---
+
+- name: "Upgrade all systems"
+  hosts: watchmen
+  gather_facts: true
+  become: true
+  roles:
+    - role: ../roles/upgrade_system
+    - { role: ../roles/wireguard, is_server: true }
