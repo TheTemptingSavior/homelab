@@ -38,6 +38,63 @@ spec:
   - '*'
 ---
 apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: openfaas
+  namespace: argocd
+  # Finalizer that ensures that project is not deleted until it is not referenced by any application
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  description: OpenFAAS
+  clusterResourceWhitelist:
+  - group: '*'
+    kind: '*'
+  destinations:
+  - namespace: '*'
+    server: '*'
+  sourceRepos:
+  - '*'
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: development
+  namespace: argocd
+  # Finalizer that ensures that project is not deleted until it is not referenced by any application
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  description: Development applications
+  clusterResourceWhitelist:
+  - group: '*'
+    kind: '*'
+  destinations:
+  - namespace: '*'
+    server: '*'
+  sourceRepos:
+  - '*'
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: files
+  namespace: argocd
+  # Finalizer that ensures that project is not deleted until it is not referenced by any application
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  description: Development applications
+  clusterResourceWhitelist:
+  - group: '*'
+    kind: '*'
+  destinations:
+  - namespace: '*'
+    server: '*'
+  sourceRepos:
+  - '*'
+---
+apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: authelia
@@ -50,7 +107,39 @@ spec:
   project: core
   source:
     path: manifests/apps/00-core/01-authelia
-    repoURL: https://
+    repoURL: https://github.com/TheTemptingSavior/homelab
+    targetRevision: HEAD
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: dashboard
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+  project: core
+  source:
+    path: manifests/apps/00-core/02-dashboard
+    repoURL: https://github.com/TheTemptingSavior/homelab
+    targetRevision: HEAD
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: gotify
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+  project: core
+  source:
+    path: manifests/apps/00-core/03-gotify
+    repoURL: https://github.com/TheTemptingSavior/homelab
     targetRevision: HEAD
 ---
 apiVersion: argoproj.io/v1alpha1
@@ -63,30 +152,11 @@ metadata:
 spec:
   destination:
     server: https://kubernetes.default.svc
-  project: generic
+  project: openfaas
   source:
     path: manifests/apps/01-openfaas
-    repoURL: https://
+    repoURL: https://github.com/TheTemptingSavior/homelab
     targetRevision: HEAD
----
-apiVersion: argoproj.io/v1alpha1
-kind: AppProject
-metadata:
-  name: development
-  namespace: argocd
-  # Finalizer that ensures that project is not deleted until it is not referenced by any application
-  finalizers:
-    - resources-finalizer.argocd.argoproj.io
-spec:
-  description: Applications that aid in software development
-  clusterResourceWhitelist:
-  - group: '*'
-    kind: '*'
-  destinations:
-  - namespace: '*'
-    server: '*'
-  sourceRepos:
-  - '*'
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -101,7 +171,23 @@ spec:
   project: development
   source:
     path: manifests/apps/02-development/01-gitea
-    repoURL: https://
+    repoURL: https://github.com/TheTemptingSavior/homelab
+    targetRevision: HEAD
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: drone
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+  project: development
+  source:
+    path: manifests/apps/02-development/02-drone
+    repoURL: https://github.com/TheTemptingSavior/homelab
     targetRevision: HEAD
 ---
 apiVersion: argoproj.io/v1alpha1
@@ -117,5 +203,85 @@ spec:
   project: development
   source:
     path: manifests/apps/02-development/03-snippets
-    repoURL: https://
+    repoURL: https://github.com/TheTemptingSavior/homelab
+    targetRevision: HEAD
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kanboard
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+  project: development
+  source:
+    path: manifests/apps/02-development/04-kanboard
+    repoURL: https://github.com/TheTemptingSavior/homelab
+    targetRevision: HEAD
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nextcloud
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+  project: files
+  source:
+    path: manifests/apps/03-files/01-nextcloud
+    repoURL: https://github.com/TheTemptingSavior/homelab
+    targetRevision: HEAD
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: bitwarden
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+  project: files
+  source:
+    path: manifests/apps/03-files/02-bitwarden
+    repoURL: https://github.com/TheTemptingSavior/homelab
+    targetRevision: HEAD
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: archivebox
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+  project: files
+  source:
+    path: manifests/apps/03-files/03-archivebox
+    repoURL: https://github.com/TheTemptingSavior/homelab
+    targetRevision: HEAD
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: bookstack
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+  project: files
+  source:
+    path: manifests/apps/03-files/04-bookstack
+    repoURL: https://github.com/TheTemptingSavior/homelab
     targetRevision: HEAD
