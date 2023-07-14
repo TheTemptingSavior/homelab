@@ -401,7 +401,7 @@ spec:
         - --validating-webhook-certificate=/usr/local/certificates/cert
         - --validating-webhook-key=/usr/local/certificates/key
         - --enable-ssl-passthrough
-        - --default-ssl-certificate=kube-system/kube-wildcard-certificate
+        - --default-ssl-certificate=kube-system/codekernel-wildcard-certificate
         env:
         - name: POD_NAME
           valueFrom:

@@ -28,9 +28,17 @@
     - cert-manager-cainjector
     - cert-manager-webhook
 
+- name: Setup DigitalOcean DNS issuer
+  kubernetes.core.k8s:
+    state: present
+    kubeconfig: "/home/{{ ansible_user }}/.kube/config"
+    template: digitalocean-dns.yml
+    namespace: cert-manager
+
 - name: Create wildcard certificate
   kubernetes.core.k8s:
     state: present
     kubeconfig: "/home/{{ ansible_user }}/.kube/config"
-    template: kube-wildcard.yml
+#    template: kube-wildcard.yml
+    template: digitalocean-wildcard.yml
     namespace: cert-manager
