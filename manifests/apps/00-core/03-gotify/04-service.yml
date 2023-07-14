@@ -1,0 +1,17 @@
+---
+# Source: authelia/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: gotify-service
+  namespace: gotify
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  selector:
+    name: gotify
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 80

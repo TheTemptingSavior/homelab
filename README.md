@@ -63,6 +63,17 @@ kubectl create secret generic authelia-secret \
   | kubeseal -o yaml > ./manifests/apps/00-core/01-authelia/05-sealed-secret.yml
 ```
 
+#### Gotify
+```bash
+kubectl create secret generic gotify-secret \
+  --output=yaml \
+  --dry-run=client \
+  --namespace=gotify \
+  --from-literal=GOTIFY_DEFAULTUSER_NAME=admin \
+  --from-literal=GOTIFY_DEFAULTUSER_PASS=admin
+  | kubeseal -o yaml > ./manifests/apps/00-core/03-gotify/02-sealed-secret.yml
+```
+
 ### Development
 
 #### Gitea
