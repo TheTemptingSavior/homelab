@@ -298,6 +298,8 @@ subjects:
 apiVersion: v1
 data:
   allow-snippet-annotations: "true"
+#  use-forwarded-headers: "true"
+  use-proxy-protocol: "true"
 kind: ConfigMap
 metadata:
   labels:
@@ -339,7 +341,8 @@ spec:
     app.kubernetes.io/component: controller
     app.kubernetes.io/instance: ingress-nginx
     app.kubernetes.io/name: ingress-nginx
-  type: NodePort
+  type: LoadBalancer
+  externalTrafficPolicy: Local
 ---
 apiVersion: v1
 kind: Service
@@ -365,7 +368,7 @@ spec:
   type: ClusterIP
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: DaemonSet
 metadata:
   labels:
     app.kubernetes.io/component: controller
@@ -390,6 +393,18 @@ spec:
         app.kubernetes.io/instance: ingress-nginx
         app.kubernetes.io/name: ingress-nginx
     spec:
+      tolerations:
+        # these tolerations are to have the daemonset runnable on control plane nodes
+        # remove them if your control plane nodes should not run pods
+        - key: node-role.kubernetes.io/control-plane
+          operator: Exists
+          effect: NoSchedule
+        - key: node-role.kubernetes.io/master
+          operator: Exists
+          effect: NoSchedule
+        - key: CriticalAddonsOnly
+          operator: Exists
+          effect: NoExecute
       containers:
       - args:
         - /nginx-ingress-controller
