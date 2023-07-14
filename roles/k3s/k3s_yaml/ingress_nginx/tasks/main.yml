@@ -1,0 +1,50 @@
+---
+- name: Create Ingress Nginx namespace
+  kubernetes.core.k8s:
+    name: ingress-nginx
+    api_version: v1
+    kind: Namespace
+    state: present
+    kubeconfig: "/home/{{ ansible_user }}/.kube/config"
+
+- name: Install ingress-nginx
+  kubernetes.core.k8s:
+    state: present
+    kubeconfig: "/home/{{ ansible_user }}/.kube/config"
+    template: ingress-nginx.yml
+    namespace: ingress-nginx
+
+- name: Waiting for ingress-nginx to be deployed
+  kubernetes.core.k8s_info:
+    kubeconfig: "/home/{{ ansible_user }}/.kube/config"
+    kind: DaemonSet
+    wait: true
+    name: ingress-nginx-controller
+    namespace: ingress-nginx
+    wait_sleep: 10
+    wait_timeout: 360
+
+- name: Create test namespace
+  kubernetes.core.k8s:
+    name: test
+    api_version: v1
+    kind: Namespace
+    state: present
+    kubeconfig: "/home/{{ ansible_user }}/.kube/config"
+
+- name: Create test deployment
+  kubernetes.core.k8s:
+    state: present
+    kubeconfig: "/home/{{ ansible_user }}/.kube/config"
+    template: test-deployment.yml
+    namespace: test
+
+- name: Wait for test deployment to be deployed
+  kubernetes.core.k8s_info:
+    kubeconfig: "/home/{{ ansible_user }}/.kube/config"
+    kind: Deployment
+    wait: true
+    name: test-nginx-app
+    namespace: test
+    wait_sleep: 10
+    wait_timeout: 360

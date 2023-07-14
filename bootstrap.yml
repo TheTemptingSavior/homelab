@@ -1,8 +1,0 @@
----
-- hosts: master
-  become: yes
-  roles:
-    - role: k3s-yaml/ingress-nginx
-    - role: k3s-yaml/sealed-secrets
-    - role: k3s-yaml/cert-manager
-    - role: k3s-yaml/argocd

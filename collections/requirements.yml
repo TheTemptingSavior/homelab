@@ -1,5 +1,0 @@
----
-collections:
-  - name: community.general
-  - name: kubernetes.core
-  - name: geerlingguy.glusterfs

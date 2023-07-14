@@ -1,0 +1,9 @@
+---
+
+gluster_packages:
+  - glusterfs-server
+  - glusterfs-client
+
+gluster_mount_dir: /mnt/gluster/gluster
+gluster_brick_dir: /mnt/gluster/brick
+gluster_brick_name: gluster

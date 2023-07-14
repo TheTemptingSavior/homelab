@@ -1,17 +1,10 @@
 ---
 k3s_version: v1.23.9+k3s1
-ansible_user: ubuntu
 systemd_dir: /etc/systemd/system
 master_ip: "{{ hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0]) }}"
 extra_server_args: "--node-taint CriticalAddonsOnly=true:NoExecute --write-kubeconfig-mode=644 --disable traefik --flannel-backend=host-gw --etcd-expose-metrics=true"
 extra_agent_args: ""
 custom_registries: "yes"
-
-# Gluster setup
-gluster_mount_dir: /mnt/gluster/gluster
-gluster_brick_dir: /mnt/gluster/brick
-gluster_brick_name: gluster
-
 
 email_address: !vault |
           $ANSIBLE_VAULT;1.1;AES256

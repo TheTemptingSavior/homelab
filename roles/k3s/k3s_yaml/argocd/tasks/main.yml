@@ -1,0 +1,40 @@
+---
+- name: Create ArgoCD namespace
+  kubernetes.core.k8s:
+    name: argocd
+    api_version: v1
+    kind: Namespace
+    state: present
+    kubeconfig: "/home/{{ ansible_user }}/.kube/config"
+
+- name: Install ArgoCD
+  kubernetes.core.k8s:
+    state: present
+    kubeconfig: "/home/{{ ansible_user }}/.kube/config"
+    template: argocd.yml
+    namespace: argocd
+
+- name: Setup ArgoCD ingress route
+  kubernetes.core.k8s:
+    state: present
+    kubeconfig: "/home/{{ ansible_user }}/.kube/config"
+    template: ingress.yml
+    namespace: argocd
+
+- name: Wait for ArgoCD to be deployed
+  kubernetes.core.k8s_info:
+    kubeconfig: "/home/{{ ansible_user }}/.kube/config"
+    kind: Deployment
+    wait: true
+    name: argocd-server
+    namespace: argocd
+    wait_sleep: 10
+    wait_timeout: 360
+
+
+- name: ArgoCD admin secret
+  ansible.builtin.debug:
+    msg: >
+      Run the following to get the login for ArgoCD:
+
+      kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath=\"{.data.password}\" | base64 -d; echo"

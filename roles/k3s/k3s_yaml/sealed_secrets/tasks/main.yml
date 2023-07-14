@@ -1,0 +1,25 @@
+---
+
+- name: Add custom SealedSecrets key
+  kubernetes.core.k8s:
+    state: present
+    kubeconfig: "/home/{{ ansible_user }}/.kube/config"
+    template: custom-secret.yml
+    namespace: kube-system
+
+- name: Install Sealed Secrets
+  kubernetes.core.k8s:
+    state: present
+    kubeconfig: "/home/{{ ansible_user }}/.kube/config"
+    template: sealed-secrets.yml
+    namespace: kube-system
+
+- name: Waiting for sealed-secrets to be deployed
+  kubernetes.core.k8s_info:
+    kubeconfig: "/home/{{ ansible_user }}/.kube/config"
+    kind: Deployment
+    wait: true
+    name: "sealed-secrets-controller"
+    namespace: kube-system
+    wait_sleep: 10
+    wait_timeout: 360

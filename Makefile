@@ -1,29 +1,15 @@
-install:
-	ansible-playbook -i inventory/homelab/hosts.ini --vault-password-file=.vault-password install.yml
+reqs:
+	python3 -m venv venv
+	venv/bin/pip3 install -r requirements.txt
+	venv/bin/ansible-galaxy collection install -p ./galaxy_collections community.general
+	venv/bin/ansible-galaxy collection install -p ./galaxy_collections kubernetes.core
+	venv/bin/ansible-galaxy install -p ./galaxy_roles geerlingguy.glusterfs
 
-uninstall:
-	ansible-playbook -i inventory/homelab/hosts.ini --vault-password-file=.vault-password uninstall.yml
-
-bootstrap:
-	ansible-playbook \
-		-i inventory/homelab/hosts.ini \
-		--vault-password-file=.vault-password \
-		bootstrap.yml
 
 ping:
 	ansible all -m ping -i inventory/homelab/hosts.ini
 
-decrypt:
-	ansible-vault decrypt \
-		--vault-password-file=.vault-password \
-		inventory/homelab/group_vars/vault.yml
 
-encrypt:
-	ansible-vault encrypt \
-		--vault-password-file=.vault-password \
-		inventory/homelab/group_vars/vault.yml
+run:
+	ansible-playbook -i inventory/$(INVENTORY)/hosts.ini --vault-password-file=.vault-password playbooks/$(PLAYBOOK)
 
-gitinit:
-	@./git-init.sh
-	@echo "ansible vault pre-commit hook installed"
-	@echo "don't forget to create a .vault-password too"

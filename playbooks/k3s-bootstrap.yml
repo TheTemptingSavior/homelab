@@ -1,0 +1,10 @@
+---
+
+- name: "Create cluster services"
+  hosts: master
+  become: true
+  roles:
+    - role: k3s/k3s_yaml/ingress_nginx
+    - role: k3s/k3s_yaml/sealed_secrets
+    - role: k3s/k3s_yaml/cert_manager
+    - role: k3s/k3s_yaml/argocd

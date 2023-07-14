@@ -2,3 +2,6 @@ venv/
 .idea/
 .vault-password
 *.crt
+
+galaxy_collections/
+galaxy_roles
