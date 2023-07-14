@@ -10,12 +10,12 @@ Create a file called `.vault-password` in the root of this repository and paste 
 variables here. If you don't have one yet, create a new password now.
 
 By default, the install process will set up a custom registry in DigitalOcean. If you do not have one you should set
-`custom_registries` to `no` in `inventory/homelab/group_vars/all.yml`. If you do have a custom registry in DigitalOcean
+`custom_registries` to `no` in `roles/k3s/a_prereq/defaults/main.yml`. If you do have a custom registry in DigitalOcean
 update the `do_registry_key` using the `encrypt_string` command at the bottom of this README.
 
 Then install the basic K3S cluster:
 ```bash
-make install
+make run PLAYBOOK="k3s-install.yml"
 ```
 
 ## Kubeconfig
@@ -33,9 +33,10 @@ The encrypted secrets in this repository are for an example cluster and have bee
 controller previously installed on it. You will need to re-encrypt all the secrets used in this repository using your 
 own Sealed Secrets controller with its own certificate.
 
-The method used here is to create a custom certificate/key pair and encrypt it in `inventory/homelab/group_vars/all.yml`
-where it can then be templated into the remote cluster. This means that across cluster setups and teardowns you can use
-one set of encrypted secrets because Sealed Secrets will use the same certificate/key pair each time.
+The method used here is to create a custom certificate/key pair and encrypt it in `roles/k3s/k3s_yaml/sealed_secrets/
+defaults/main.yml` where it can then be templated into the remote cluster. This means that across cluster setups and
+teardowns you can use one set of encrypted secrets because Sealed Secrets will use the same certificate/key pair each
+time.
 
 ### Setting Up Certificates
 
@@ -73,7 +74,8 @@ the encrypted secrets all use the new certificate/key that you created earlier. 
 
 ## Setup Core Services
 
-Before starting you need to make sure you reset the variables to your own values:
+Before starting you need to make sure you reset the variables to your own values. These encrypted values need to be
+placed in `roles/k3s/k3s_yaml/cert_manager/defaults.yml`
 ```bash
 ansible-vault encrypt_string \
         --vault-password-file=.vault-password \
@@ -87,14 +89,14 @@ ansible-vault encrypt_string \
 ```
 
 By default, this setup will install a DigitalOcean wildcard DNS certificate using Let's Encrypt. You may want to remove
-these parts from the `roles/k3s-yaml/cert-manager` folder if this doesn't apply here. I would strongly recommend it
+these parts from the `roles/k3s_yaml/cert_manager` folder if this doesn't apply here. I would strongly recommend it
 though as creating a wildcard certificate means you can use HTTPS across the services in the cluster using the default
 certificate.
 
 Run the following playbook against the new inventory:
 
 ```bash
-make bootstrap
+make run PLAYBOOK="k3s-bootstrap.yml"
 ```
 
 Once [ArgoCD](https://github.com/argoproj/argo-cd) is installed, you can access the dashboard from

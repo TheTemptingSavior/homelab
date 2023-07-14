@@ -11,5 +11,5 @@ ping:
 
 
 run:
-	ansible-playbook -i inventory/$(INVENTORY)/hosts.ini --vault-password-file=.vault-password playbooks/$(PLAYBOOK)
+	ansible-playbook -i inventory/homelab/hosts.ini --vault-password-file=.vault-password playbooks/$(PLAYBOOK)
 
