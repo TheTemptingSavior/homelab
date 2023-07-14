@@ -1,0 +1,8 @@
+---
+
+- name: Install Sealed Secrets
+  kubernetes.core.k8s:
+    state: present
+    kubeconfig: "/home/{{ ansible_user }}/.kube/config"
+    template: sealed-secrets.yml
+    namespace: kube-system

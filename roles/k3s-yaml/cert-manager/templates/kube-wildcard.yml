@@ -1,0 +1,23 @@
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: selfsigned
+  namespace: cert-manager
+spec:
+  selfSigned: {}
+
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: kube-wildcard-certificate
+  namespace: kube-system
+spec:
+  dnsNames:
+    - kube.codekernel.co.uk
+    - "*.kube.codekernel.co.uk"
+  secretName: kube-wildcard-certificate
+  issuerRef:
+    name: selfsigned
+    kind: ClusterIssuer
