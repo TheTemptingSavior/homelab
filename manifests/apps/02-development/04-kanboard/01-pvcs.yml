@@ -6,7 +6,7 @@ metadata:
   namespace: kanboard
 spec:
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   storageClassName: longhorn
   resources:
     requests:

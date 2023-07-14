@@ -19,7 +19,7 @@ metadata:
   namespace: gitea
 spec:
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   storageClassName: longhorn
   resources:
     requests:

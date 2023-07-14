@@ -19,7 +19,7 @@ metadata:
   namespace: nextcloud
 spec:
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   storageClassName: longhorn
   resources:
     requests:
