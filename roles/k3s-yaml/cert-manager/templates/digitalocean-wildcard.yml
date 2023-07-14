@@ -10,5 +10,5 @@ spec:
     - "*.codekernel.co.uk"
   secretName: codekernel-wildcard-certificate
   issuerRef:
-    name: letsencrypt-staging-issuer
+    name: letsencrypt-issuer
     kind: ClusterIssuer
