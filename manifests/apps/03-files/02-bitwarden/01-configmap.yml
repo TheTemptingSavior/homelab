@@ -12,4 +12,5 @@ data:
   LOG_FILE: "data/vaultwarden.log"
   SIGNUPS_ALLOWED: "false"
   DOMAIN: "https://vaultwarden.codekernel.co.uk"
+  DISABLE_ADMIN_TOKEN: "false"
 

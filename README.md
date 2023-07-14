@@ -57,6 +57,7 @@ openssl req -x509 \
 
 CRT=$(cat $PUBLICKEY | base64)
 KEY=$(cat $PRIVATEKEY | base64)
+# Make sure to remove the newlines from the output
 # Paste the outputs into the all.yml file
 ansible-vault encrypt_string \
         --vault-password-file=.vault-password \
@@ -122,7 +123,7 @@ kubectl create secret generic authelia-secret \
   --from-literal=STORAGE_PASSWORD=helloworld \
   --from-literal=SESSION_ENCRYPTION_KEY=helloworld \
   --from-literal=STORAGE_ENCRYPTION_KEY=helloworld \
-  | kubeseal -o yaml --cert=./inventory/homelab/group_vars/mytls.crt > ./manifests/apps/00-core/01-authelia/05-sealed-secret.yml
+  | kubeseal -o yaml --cert=./inventory/homelab/group_vars/mytls.crt > ./manifests/apps/00-core/01-authelia/04-sealed-secret.yml
 ```
 
 #### Gotify
@@ -133,7 +134,7 @@ kubectl create secret generic gotify-secret \
   --namespace=gotify \
   --from-literal=GOTIFY_DEFAULTUSER_NAME=admin \
   --from-literal=GOTIFY_DEFAULTUSER_PASS=admin \
-  | kubeseal -o yaml --cert=./inventory/homelab/group_vars/mytls.crt > ./manifests/apps/00-core/03-gotify/03-sealed-secret.yml
+  | kubeseal -o yaml --cert=./inventory/homelab/group_vars/mytls.crt > ./manifests/apps/00-core/03-gotify/02-sealed-secret.yml
 ```
 
 ### Development
@@ -145,7 +146,7 @@ kubectl create secret generic postgres-secret \
     --dry-run=client \
     --namespace=gitea \
     --from-literal=POSTGRES_PASSWORD=helloworld \
-    | kubeseal -o yaml --cert=./inventory/homelab/group_vars/mytls.crt > ./manifests/apps/02-development/01-gitea/03-postgres-secret-sealed.yml
+    | kubeseal -o yaml --cert=./inventory/homelab/group_vars/mytls.crt > ./manifests/apps/02-development/01-gitea/02-postgres-secret-sealed.yml
 ```
 
 ```bash
@@ -155,7 +156,7 @@ kubectl create secret generic gitea-secret \
     --namespace=gitea \
     --from-literal=GITEA__database__PASSWD=helloworld \
     --from-literal=GITEA__security__SECRET_KEY=hello_world_but_32_characters_XX \
-    | kubeseal -o yaml --cert=./inventory/homelab/group_vars/mytls.crt > ./manifests/apps/02-development/01-gitea/09-gitea-secret-sealed.yml
+    | kubeseal -o yaml --cert=./inventory/homelab/group_vars/mytls.crt > ./manifests/apps/02-development/01-gitea/08-gitea-secret-sealed.yml
 ```
 
 #### Drone
@@ -167,7 +168,7 @@ kubectl create secret generic drone-secret \
     --from-literal=DRONE_RPC_SECRET=helloworld \
     --from-literal=DRONE_GITEA_CLIENT_ID=helloworld \
     --from-literal=DRONE_GITEA_CLIENT_SECRET=helloworld \
-    | kubeseal -o yaml --cert=./inventory/homelab/group_vars/mytls.crt > ./manifests/apps/02-development/02-drone/02-secret-sealed.yml
+    | kubeseal -o yaml --cert=./inventory/homelab/group_vars/mytls.crt > ./manifests/apps/02-development/02-drone/01-secret-sealed.yml
 ```
 
 ```bash
@@ -176,7 +177,7 @@ kubectl create secret generic drone-runner-secret \
   --dry-run=client \
   --namespace=drone \
   --from-literal=DRONE_RPC_SECRET=helloworld \
-  | kubeseal -o yaml --cert=./inventory/homelab/group_vars/mytls.crt > ./manifests/apps/02-development/02-drone/10-runner-secret-sealed.yml
+  | kubeseal -o yaml --cert=./inventory/homelab/group_vars/mytls.crt > ./manifests/apps/02-development/02-drone/09-runner-secret-sealed.yml
 ```
 
 ### Files
@@ -189,7 +190,7 @@ kubectl create secret generic mariadb-secret \
     --dry-run=client \
     --namespace=nextcloud \
     --from-literal=MYSQL_PASSWORD=helloworld \
-    | kubeseal -o yaml --cert=./inventory/homelab/group_vars/mytls.crt > ./manifests/apps/03-files/01-nextcloud/03-mariadb-secret-sealed.yml
+    | kubeseal -o yaml --cert=./inventory/homelab/group_vars/mytls.crt > ./manifests/apps/03-files/01-nextcloud/02-mariadb-secret-sealed.yml
 ```
 
 ```bash
@@ -198,7 +199,7 @@ kubectl create secret generic nextcloud-secret \
     --dry-run=client \
     --namespace=nextcloud \
     --from-literal=MYSQL_PASSWORD=helloworld \
-    | kubeseal -o yaml --cert=./inventory/homelab/group_vars/mytls.crt > ./manifests/apps/03-files/01-nextcloud/09-nextcloud-secret-sealed.yml
+    | kubeseal -o yaml --cert=./inventory/homelab/group_vars/mytls.crt > ./manifests/apps/03-files/01-nextcloud/08-nextcloud-secret-sealed.yml
 ```
 
 ## Notes

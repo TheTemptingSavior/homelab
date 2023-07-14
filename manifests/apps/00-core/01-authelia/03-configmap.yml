@@ -23,8 +23,9 @@ data:
       asset_path: ""
       headers:
         csp_template: ""
-      read_buffer_size: 4096
-      write_buffer_size: 4096
+      buffers:
+        read: 4096
+        write: 4096
       enable_pprof: false
       enable_expvars: false
     log:

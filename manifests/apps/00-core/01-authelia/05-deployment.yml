@@ -46,7 +46,7 @@ spec:
       enableServiceLinks: false
       containers:
       - name: authelia
-        image: ghcr.io/authelia/authelia:4.36.1
+        image: ghcr.io/authelia/authelia:4.37.3
         imagePullPolicy: IfNotPresent
         command: ["authelia"]
         args:
@@ -132,6 +132,10 @@ spec:
             path: SESSION_ENCRYPTION_KEY
           - key: STORAGE_ENCRYPTION_KEY
             path: STORAGE_ENCRYPTION_KEY
+          - key: SESSION_SECRET
+            path: SESSION_SECRET
+          - key: STORAGE_PASSWORD
+            path: STORAGE_PASSWORD
       - name: authelia-config
         hostPath:
           path: /mnt/gluster/gluster/core/authelia/data
