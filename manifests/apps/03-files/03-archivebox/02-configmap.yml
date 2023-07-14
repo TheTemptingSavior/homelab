@@ -1,0 +1,12 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: archivebox-config
+  namespace: archivebox
+data:
+  MEDIA_MAX_SIZE: "750m"
+  ALLOWED_HOSTS: "*"
+  OUTPUT_DIR: "/data"
+
+
