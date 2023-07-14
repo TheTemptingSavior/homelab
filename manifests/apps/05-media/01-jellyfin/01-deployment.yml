@@ -1,0 +1,66 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jellyfin
+  namespace: jellyfin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jellyfin
+  template:
+    metadata:
+      labels:
+        app: jellyfin
+    spec:
+      containers:
+        - name: jellyfin
+          image: linuxserver/jellyfin:10.8.8
+          imagePullPolicy: "IfNotPresent"
+          securityContext:
+            privileged: true
+          ports:
+            - containerPort: 8096
+              name: http
+              protocol: TCP
+            - name: discovery-udp
+              containerPort: 7539
+              protocol: UDP
+            - name: dlna-udp
+              containerPort: 1900
+              protocol: UDP
+          env:
+            - name: JELLYFIN_PublishedServerUrl
+              value: "jellyfin.codekernel.co.uk"
+            - name: PUID
+              value: "0"
+            - name: "PGID"
+              value: "0"
+            - name: TZ
+              value: "Europe/London"
+          volumeMounts:
+            - mountPath: /config
+              name: jellyfin
+            - mountPath: /dev/dri/renderD128
+              name: device-renderd128
+            - mountPath: /dev/dri/card0
+              name: device-card0
+            - mountPath: /media
+              name: media
+      volumes:
+        - name: jellyfin
+          hostPath:
+            path: /mnt/gluster/gluster/media/jellyfin
+        # TODO: Add `emptyDir` for the transcode and cache directories (avoid writing to gluster too much)
+        - name: device-renderd128
+          hostPath:
+            path: /dev/dri/renderD128
+        - name: device-card0
+          hostPath:
+            path: /dev/dri/card0
+        - name: media
+          nfs:
+            server: 192.168.57.2
+            path: /mnt/user/media
+            readOnly: true
