@@ -7,7 +7,8 @@ metadata:
 data:
   config.php: |
     <?php
-    define('REVERSE_PROXY_AUTH', true);
-    define('REVERSE_PROXY_USER_HEADER', 'REMOTE_USER');
-    define('REVERSE_PROXY_DEFAULT_ADMIN', 'myadmin');
-    define('REVERSE_PROXY_DEFAULT_DOMAIN', 'kanboard.codekernel.co.uk');
+    // define('REVERSE_PROXY_AUTH', true);
+    // define('REVERSE_PROXY_USER_HEADER', 'REMOTE-USER');
+    // define('REVERSE_PROXY_DEFAULT_ADMIN', 'admin');
+    // define('REVERSE_PROXY_DEFAULT_DOMAIN', 'gmail.com');
+    define('LOG_DRIVER', 'stdout');

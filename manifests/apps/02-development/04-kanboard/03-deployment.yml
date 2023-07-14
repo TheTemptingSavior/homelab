@@ -27,6 +27,8 @@ spec:
           name: kanboard-data
         - mountPath: /var/www/app/config.php
           name: kanboard-config
+          readOnly: true
+          subPath: config.php
       volumes:
       - name: kanboard-data
         persistentVolumeClaim:
@@ -34,3 +36,6 @@ spec:
       - name: kanboard-config
         configMap:
           name: kanboard-configmap
+          items:
+            - key: config.php
+              path: config.php
