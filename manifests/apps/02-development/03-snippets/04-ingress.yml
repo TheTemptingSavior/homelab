@@ -1,0 +1,24 @@
+---
+kind: Ingress
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: snippets-ingress
+  namespace: snippets
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+spec:
+  rules:
+  - host: snippets.codekernel.co.uk
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: snippets-service
+            port:
+              number: 5000
+  tls:
+  - hosts:
+    - snippets.codekernel.co.uk
