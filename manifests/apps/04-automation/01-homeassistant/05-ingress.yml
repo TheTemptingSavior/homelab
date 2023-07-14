@@ -1,0 +1,26 @@
+---
+# Source: authelia/templates/ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: homeassistant-ingress
+  namespace: homeassistant
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/whitelist-source-range: "192.168.56.0/24,192.168.57.0/24,192.168.59.0/24"
+spec:
+  rules:
+    - host: homeassistant.codekernel.co.uk
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: homeassistant-service
+                port:
+                  number: 8123
+  tls:
+  - hosts:
+    - homeassistant.codekernel.co.uk
