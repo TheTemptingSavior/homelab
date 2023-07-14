@@ -4,9 +4,10 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: drone
+  namespace: drone
   labels:
     release: drone
-    helm.sh/chart: drone-0.6.0
+    helm.sh/chart: drone-0.6.1
     app.kubernetes.io/name: drone
     app.kubernetes.io/instance: drone
     app.kubernetes.io/component: server
@@ -20,7 +21,7 @@ spec:
       app.kubernetes.io/instance: drone
       app.kubernetes.io/component: server
   strategy:
-    {}
+        {}
   template:
     metadata:
       labels:
@@ -28,7 +29,7 @@ spec:
         app.kubernetes.io/instance: drone
         app.kubernetes.io/component: server
       annotations:
-        checksum/secrets: 7adaf7b470e0c0b761629fe15f8304f79782e0e0ec8ce28f79826bf28dbd8f62
+        checksum/secrets: 30d5e3d95ec0f283ad064cbcaad5ab1592fe3979342d2d3a11c128422b31525b
     spec:
       automountServiceAccountToken: false
       serviceAccountName: drone
@@ -56,7 +57,7 @@ spec:
             {}
           envFrom:
             - configMapRef:
-                name: drone-config
+                name: drone
             - secretRef:
                 name: drone-secret
           volumeMounts:
@@ -66,4 +67,4 @@ spec:
       volumes:
         - name: storage-volume
           persistentVolumeClaim:
-            claimName: drone-pvc
+            claimName: drone
