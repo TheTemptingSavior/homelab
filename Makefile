@@ -10,6 +10,9 @@ bootstrap:
 		--vault-password-file=.vault-password \
 		bootstrap.yml
 
+ping:
+	ansible all -m ping -i inventory/homelab/hosts.ini
+
 decrypt:
 	ansible-vault decrypt \
 		--vault-password-file=.vault-password \
