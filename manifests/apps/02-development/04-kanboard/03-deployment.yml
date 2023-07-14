@@ -23,9 +23,14 @@ spec:
         - containerPort: 80
           name: kanboard-http
         volumeMounts:
-        - mountPath: /var/www
+        - mountPath: /var/www/app/data
           name: kanboard-data
+        - mountPath: /var/www/app/config.php
+          name: kanboard-config
       volumes:
       - name: kanboard-data
         persistentVolumeClaim:
           claimName: kanboard-pvc
+      - name: kanboard-config
+        configMap:
+          name: kanboard-configmap
