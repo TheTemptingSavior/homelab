@@ -8,5 +8,16 @@ data:
   MEDIA_MAX_SIZE: "750m"
   ALLOWED_HOSTS: "*"
   OUTPUT_DIR: "/data"
-
-
+  SAVE_TITLE: "True"
+  SAVE_FAVICON: "True"
+  SAVE_WGET: "True"
+  SAVE_WARC: "True"
+  SAVE_PDF: "True"
+  SAVE_SCREENSHOT: "True"
+  SAVE_DOM: "True"
+  SAVE_SINGLEFILE: "True"
+  SAVE_READABILITY: "True"
+  SAVE_GIT: "True"
+  SAVE_MEDIA: "True"
+  SUBMIT_ARCHIVE_DOT_ORG: "False"
+  SAVE_WGET_REQUISITES: "True"
