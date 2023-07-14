@@ -1,0 +1,31 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: snippets
+  namespace: snippets
+  labels:
+    app: snippets
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: snippets
+  template:
+    metadata:
+      labels:
+        app: snippets
+    spec:
+      containers:
+      - name: snippets
+        image: pawelmalak/snippet-box:latest
+        ports:
+        - containerPort: 5000
+          name: snippets-http
+        volumeMounts:
+        - mountPath: /app/data
+          name: snippets-data
+      volumes:
+      - name: snippets-data
+        persistentVolumeClaim:
+          claimName: snippets-pvc

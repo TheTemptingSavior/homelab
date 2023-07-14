@@ -17,21 +17,35 @@ data:
     default_redirection_url: https://codekernel.co.uk
     default_2fa_method: ""
     server:
-      host: 0.0.0.0
-      port: 9091
-      asset_path: ""
+      address: "tcp://:9091"
+      path: ""
+      asset_path: "/config/assets/"
+      disable_healthcheck: false
       headers:
         csp_template: ""
       buffers:
         read: 4096
         write: 4096
-      enable_pprof: false
-      enable_expvars: false
+      timeouts:
+        read: "6s"
+        write: "6s"
+        idle: "30s"
     log:
       level: info
       format: text
       file_path: ""
       keep_stdout: true
+    telemetry:
+      metrics:
+        enabled: true
+        address: "tcp://:9959"
+        buffers:
+          read: 4096
+          write: 4096
+        timeouts:
+          read: 6s
+          write: 6s
+          idle: 30s
     totp:
       disable: false
       issuer: codekernel.co.uk
@@ -52,8 +66,10 @@ data:
       password_reset:
         disable: true
         custom_url: ""
+      refresh_interval: "always"
       file:
         path: /users_database.yml
+        watch: true
         password: 
           algorithm: sha512
           iterations: 100000
@@ -73,6 +89,8 @@ data:
       zxcvbn:
         enabled: false
         min_score: 0
+    privacy_policy:
+      enabled: false
     session:
       name: authelia_session
       domain: codekernel.co.uk
@@ -83,6 +101,7 @@ data:
       redis:
         host: redis.authelia.svc.cluster.local
         port: 6379
+        database_index: 0
     regulation: 
       ban_time: 5m
       find_time: 2m
@@ -95,24 +114,51 @@ data:
       filesystem:
         filename: /config/notification.txt
     access_control:
-      default_policy: one_factor
+      default_policy: deny
       networks: 
       - name: private
         networks:
-        - 10.0.0.0/8
-        - 172.16.0.0/12
-        - 192.168.0.0/16
+          - 10.0.0.0/8
+          - 172.16.0.0/12
+          - 192.168.0.0/16
       - name: vpn
         networks:
-        - 192.168.64.0/24
-        - 192.168.65.0/24
+          - 192.168.64.0/24
+          - 192.168.65.0/24
+      - name: home
+        networks:
+          - 192.168.56.0/24
+          - 192.168.57.0/24
+          - 192.168.58.0/24
+          - 192.168.59.0/24
       rules:
+        # Protect the vaultwarden admin routes
+        - policy: one_factor
+          domain: 'vaultwarden.codekernel.co.uk'
+          resources:
+            - "^*/admin.*$"
+        ## Bypass the following domains externally
+        - policy: bypass
+          domain: 
+            # Authelia - required
+            - 'auth.codekernel.co.uk'
+            # Dashboard - default redirect
+            - 'codekernel.co.uk'
+            # Git - own authentication
+            - 'git.codekernel.co.uk'
+            # Drone - uses git authentication
+            - 'drone.codekernel.co.uk'
+            # Nextcloud - own authentication
+            - 'nextcloud.codekernel.co.uk'
+            # Vaultwarden - own auth - but no admin route
+            - 'vaultwarden.codekernel.co.uk'
         - policy: bypass
           domain:
-            - 'codekernel.co.uk'
-        - policy: one_factor
-          domain:
-            - 'snippets.codekernel.co.uk'
+            - rancher.codekernel.co.uk
+            - longhorn.codekernel.co.uk
+          networks:
+            - vpn
+            - home
         - policy: bypass
           domain: 'dash.codekernel.co.uk'
           networks:
@@ -131,6 +177,12 @@ data:
         password: "$argon2id$v=19$m=65536,t=3,p=4$UXNNN1F4M1M4VWFtcHZnaQ$o2wtG+gJ1/+n+ee4TLr3iDgrK+iTu0VQDoy1iXGWH7M"
         groups:
           - admin
+          - dev
+      tom:
+        displayname: "Tom"
+        email: "tom@awencollective.com"
+        password: "$argon2id$v=19$m=65536,t=3,p=4$appuDmT5MjKzK/5+EhkcQw$slkSJcAIuMqf6+7XjYIwfaqu3l0ixh2d53k3pecAOAk" 
+        groups:
           - dev
     ...
     # yamllint enable rule:line-length

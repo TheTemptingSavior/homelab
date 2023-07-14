@@ -1,0 +1,10 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mariadb-config
+  namespace: bookstack
+data:
+  MYSQL_DATABASE: bookstack
+  MYSQL_USER: bookstack
+  TZ: Europe/London

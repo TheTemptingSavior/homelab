@@ -1,0 +1,8 @@
+---
+
+- name: Restart the k3s-node service
+  ansible.builtin.systemd:
+    name: k3s-node
+    daemon_reload: true
+    state: restarted
+    enabled: true

@@ -75,7 +75,7 @@ spec:
                 capabilities:
                   add:
                     - SYS_ADMIN
-              imagePullPolicy: always
+              imagePullPolicy: Always
               restartPolicy: OnFailure
               command:
                 - /bin/bash

@@ -8,6 +8,8 @@ packages:
   - "nfs-common"
   - "net-tools"
   - "dnsutils"
+  - "open-iscsi"
 
 pip_packages:
   - "docker"
+  - "kubernetes"

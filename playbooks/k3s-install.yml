@@ -9,20 +9,14 @@
     - role: k3s/b_download
     - role: k3s/c_raspberrypi
 
-- name: "Setup GlusterFS on nodes"
-  hosts: node
-  become: true
-  roles:
-    - role: k3s/d_glusterfs
-
 - name: "Create K3S master node"
   hosts: master
   become: true
   roles:
-    - role: k3s/e_k3s/master
+    - role: k3s/d_k3s/master
 
 - name: "Create K3S worker nodes"
   hosts: node
   become: true
   roles:
-    - role: k3s/e_k3s/node
+    - role: k3s/d_k3s/node

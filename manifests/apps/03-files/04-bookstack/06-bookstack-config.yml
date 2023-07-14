@@ -1,0 +1,12 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: bookstack-config
+  namespace: bookstack
+data:
+  DB_HOST: "mariadb.bookstack.svc.cluster.local"
+  DB_PORT: "3306"
+  DB_USER: "bookstack"
+  DB_DATABASE: "bookstack"
+  APP_URL: "https://bookstack.codekernel.co.uk"

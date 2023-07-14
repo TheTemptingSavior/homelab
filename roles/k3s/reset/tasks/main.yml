@@ -37,7 +37,6 @@
     - /var/lib/kubelet
     - /var/lib/rancher/k3s
     - /var/lib/cni/networks/cbr0
-    - /var/lib/longhorn
 
 - name: Daemon_reload
   ansible.builtin.systemd:

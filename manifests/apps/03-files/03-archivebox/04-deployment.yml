@@ -1,0 +1,39 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: archivebox
+  namespace: archivebox
+spec:
+  selector:
+    matchLabels:
+      name: archivebox
+  template:
+    metadata:
+      labels:
+        name: archivebox
+    spec:
+      initContainers:
+      - name: init-data-perms
+        image: archivebox/archivebox:master
+        args: ["init"]
+        volumeMounts:
+        - mountPath: /data
+          name: archivebox-data
+      containers:
+      - name: archivebox
+        image: archivebox/archivebox:master
+        imagePullPolicy: Always
+        args: ["server", "--quick-init", "0.0.0.0:8000"]
+        envFrom:
+        - configMapRef:
+            name: archivebox-config
+        ports:
+        - containerPort: 8000
+        volumeMounts:
+        - mountPath: /data
+          name: archivebox-data
+      volumes:
+      - name: archivebox-data
+        persistentVolumeClaim:
+          claimName: archivebox-pvc

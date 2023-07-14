@@ -1,0 +1,34 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mariadb
+  namespace: bookstack
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mariadb
+  template:
+    metadata:
+      labels:
+        app: mariadb
+    spec:
+      containers:
+        - name: mariadb
+          image: linuxserver/mariadb:10.6.9
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 3306
+          envFrom:
+            - configMapRef:
+                name: mariadb-config
+            - secretRef:
+                name: mariadb-secret
+          volumeMounts:
+            - mountPath: /config
+              name: mariadb
+      volumes:
+        - name: mariadb
+          persistentVolumeClaim:
+            claimName: mariadb-pvc

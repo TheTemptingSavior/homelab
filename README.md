@@ -20,6 +20,15 @@ Then install the basic K3S cluster:
 make run PLAYBOOK="k3s-install.yml"
 ```
 
+### Upgrading K3S
+
+Upgrading K3S can be done by updating the target version of k3s in the file `roles/k3s/b_download/defaults/main.yml`.
+Once updated, the playbook `k3s-upgrade.yml` can be run. This will first take a backup of the k3s cluster and then
+proceed to download the new k3s binary and restart the k3s systemd services.
+```bash
+make run PLAYBOOK="k3s-upgrade.yml"
+```
+
 ## Kubeconfig
 
 To get access to your **Kubernetes** cluster just
