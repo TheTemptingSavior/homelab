@@ -14,7 +14,7 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-connect-timeout: "30"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "1800"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "1800"
-    nginx.ingress.kubernetes.io/whitelist-source-range: "192.168.56.0/24,192.168.57.0/24,192.168.59.0/24"
+    nginx.ingress.kubernetes.io/whitelist-source-range: "192.168.56.0/21,192.168.65.0/24"
 spec:
   rules:
   - host: rancher.codekernel.co.uk

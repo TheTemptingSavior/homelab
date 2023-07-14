@@ -8,7 +8,7 @@ metadata:
     kubernetes.io/ingress.class: "nginx"
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
     nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
-    nginx.ingress.kubernetes.io/whitelist-source-range: "192.168.56.0/24,192.168.57.0/24,192.168.59.0/24"
+    nginx.ingress.kubernetes.io/whitelist-source-range: "192.168.56.0/21,192.168.65.0/24"
 spec:
   rules:
   - http:
@@ -34,7 +34,7 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: "nginx"
     nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
-    nginx.ingress.kubernetes.io/whitelist-source-range: "192.168.56.0/24,192.168.57.0/24,192.168.59.0/24,10.42.0.0/16"
+    nginx.ingress.kubernetes.io/whitelist-source-range: "192.168.56.0/21,192.168.65.0/24,10.42.0.0/16"
 spec:
   rules:
   - http:

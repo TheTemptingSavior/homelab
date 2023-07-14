@@ -1,5 +1,4 @@
 ---
-# Source: authelia/templates/configMap.yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:

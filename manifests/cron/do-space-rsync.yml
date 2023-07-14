@@ -12,10 +12,10 @@ data:
     # Install rsync
     apt-get update && apt-get install -y rsync rclone
     
-    # Verify that we got our UnRAID mountpoint
+    # Verify that we got our UnRAID mount point
     mountpoint /media && stat /media/Music
     
-
+    
 ---
 apiVersion: batch/v1
 kind: CronJob
