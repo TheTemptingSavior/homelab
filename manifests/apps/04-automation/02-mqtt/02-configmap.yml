@@ -1,0 +1,14 @@
+---
+# Source: authelia/templates/configMap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mqtt-config
+  namespace: homeassistant
+data:
+  mosquitto.conf: |
+    allow_anonymous true
+    listener 1883
+    persistence true
+    persistence_location /persistent/data
+    log_dest file /persistent/mosquitto.log
