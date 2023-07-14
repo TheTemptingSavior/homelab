@@ -16,9 +16,9 @@ metadata:
 spec:
   tls:
   - hosts:
-    - codekernel.co.uk
+    - dash.codekernel.co.uk
   rules:
-  - host: codekernel.co.uk
+  - host: dash.codekernel.co.uk
     http:
       paths:
         - path: /
