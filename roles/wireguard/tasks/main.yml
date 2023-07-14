@@ -2,7 +2,7 @@
 
 - name: "Determine is_server install"
   ansible.builtin.set_fact:
-    is_server: true
+    is_server: false
   when: is_server is not defined
 
 - name: "Install wireguard package"
