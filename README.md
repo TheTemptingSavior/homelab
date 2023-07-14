@@ -6,6 +6,14 @@
 
 ## Usage
 
+Create a file called `.vault-password` in the root of this repository and paste your password for the encrypted Ansible
+variables here. If you don't have one yet, create a new password now.
+
+By default, the install process will set up a custom registry in DigitalOcean. If you do not have one you should set
+`custom_registries` to `no` in `inventory/homelab/group_vars/all.yml`. If you do have a custom registry in DigitalOcean
+update the `do_registry_key` using the `encrypt_string` command at the bottom of this README.
+
+Then install the basic K3S cluster:
 ```bash
 make install
 ```
@@ -16,7 +24,50 @@ To get access to your **Kubernetes** cluster just
 
 ```bash
 scp ubuntu@master_ip:~/.kube/config ~/.kube/config
+kubectl get nodes -o wide
 ```
+
+## Secrets
+
+The encrypted secrets in this repository are for an example cluster and have been encrypted using the sealed-secrets
+controller previously installed on it. You will need to re-encrypt all the secrets used in this repository using your 
+own Sealed Secrets controller with its own certificate.
+
+The method used here is to create a custom certificate/key pair and encrypt it in `inventory/homelab/group_vars/all.yml`
+where it can then be templated into the remote cluster. This means that across cluster setups and teardowns you can use
+one set of encrypted secrets because Sealed Secrets will use the same certificate/key pair each time.
+
+### Setting Up Certificates
+
+If you don't already have a certificate/key pair in your Ansible vars file then you should run the following to generate
+them now:
+```bash
+export PRIVATEKEY="mytls.key"
+export PUBLICKEY="mytls.crt"
+export NAMESPACE="kube-system"
+export SECRETNAME="mycustomkeys"
+
+openssl req -x509 \
+            -nodes \
+            -newkey rsa:4096 \
+            -keyout "$PRIVATEKEY" \
+            -out "$PUBLICKEY" \
+            -subj "/CN=sealed-secret/O=sealed-secret"
+
+CRT=$(cat $PUBLICKEY | base64)
+KEY=$(cat $PRIVATEKEY | base64)
+# Paste the outputs into the all.yml file
+ansible-vault encrypt_string \
+        --vault-password-file=.vault-password \
+        --name='sealed_secrets_crt' "$CRT"
+ansible-vault encrypt_string \
+        --vault-password-file=.vault-password \
+        --name='sealed_secrets_key' "$KEY"
+```
+
+Now that you have the certificates setup, you can run the bootstrap playbook to install ArgoCD, Cert Manager, Ingress
+Nginx and Sealed Secrets. Once this is done you should go down this README and rerun all the secret creation so that
+the encrypted secrets all use the new certificate/key that you created earlier. Make sure to change the default values.
 
 ## Setup Core Services
 
@@ -33,30 +84,10 @@ ansible-vault encrypt_string \
         --name='do_access_token_base64' 'base64_encoded_token'
 ```
 
-To ensure you can decrypt existing secrets you need to setup your existing certificate/key pair.
-```bash
-export PRIVATEKEY="mytls.key"
-export PUBLICKEY="mytls.crt"
-export NAMESPACE="kube-system"
-export SECRETNAME="mycustomkeys"
-
-# Only run if your certificate/key don't already exist
-openssl req -x509 \
-            -nodes \
-            -newkey rsa:4096 \
-            -keyout "$PRIVATEKEY" \
-            -out "$PUBLICKEY" \
-            -subj "/CN=sealed-secret/O=sealed-secret"
-
-CRT=$(cat $PUBLICKEY | base64)
-KEY=$(cat $PRIVATEKEY | base64)
-ansible-vault encrypt_string \
-        --vault-password-file=.vault-password \
-        --name='sealed_secrets_crt' "$CRT"
-ansible-vault encrypt_string \
-        --vault-password-file=.vault-password \
-        --name='sealed_secrets_key' "$KEY"
-```
+By default, this setup will install a DigitalOcean wildcard DNS certificate using Let's Encrypt. You may want to remove
+these parts from the `roles/k3s-yaml/cert-manager` folder if this doesn't apply here. I would strongly recommend it
+though as creating a wildcard certificate means you can use HTTPS across the services in the cluster using the default
+certificate.
 
 Run the following playbook against the new inventory:
 
@@ -66,14 +97,6 @@ make bootstrap
 
 Once [ArgoCD](https://github.com/argoproj/argo-cd) is installed, you can access the dashboard from
 `argocd.codekernel.co.uk`. 
-
-
-## Secrets
-
-Some applications require secrets. Kubernetes secrets, by default, are not encrypted and therefore not safe to store
-within a Git repo. The solution used here is [Sealed Secrets](https://github.com/bitnami-labs/sealed-secrets). However,
-if you are resetting the cluster, or for some  other reason, end up removing the sealed secrets deployment, then all
-the secrets will no longer be accessible and will need to be remade.
 
 ## System
 
