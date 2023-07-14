@@ -68,3 +68,12 @@
 
 - name: Run apt upgrade
   apt: upgrade=dist force_apt_get=yes
+
+- name: Create custom registries file
+  template:
+    src: registries.yaml.j2
+    dest: /etc/rancher/k3s/registries.yaml
+    owner: root
+    group: root
+    mode: 0644
+  when: custom_registries | bool

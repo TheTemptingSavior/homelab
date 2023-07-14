@@ -1,0 +1,9 @@
+mirrors:
+  docker.io:
+    endpoint:
+      - "https://registry.digitalocean.com"
+configs:
+  "https://registry.digitalocean.com":
+    auth:
+      username: "{{ do_registry_key }}"
+      password: "{{ do_registry_key }}"
