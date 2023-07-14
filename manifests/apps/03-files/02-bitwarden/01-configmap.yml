@@ -13,4 +13,7 @@ data:
   SIGNUPS_ALLOWED: "false"
   DOMAIN: "https://vaultwarden.codekernel.co.uk"
   DISABLE_ADMIN_TOKEN: "false"
-
+  SMTP_HOST: "smtp.gmail.com"
+  SMTP_FROM: "no-reply@vaultwarden.codekernel.co.uk"
+  SMTP_PORT: "465"
+  SMTP_SECURITY: "force_tls"

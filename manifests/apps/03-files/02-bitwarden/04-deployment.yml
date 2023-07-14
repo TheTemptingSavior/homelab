@@ -20,6 +20,8 @@ spec:
         envFrom:
           - configMapRef:
               name: vaultwarden-config
+          - secretRef:
+              name: vaultwarden-admin
         ports:
         - containerPort: 80
         volumeMounts:

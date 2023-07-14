@@ -202,6 +202,20 @@ kubectl create secret generic nextcloud-secret \
     | kubeseal -o yaml --cert=./inventory/homelab/group_vars/mytls.crt > ./manifests/apps/03-files/01-nextcloud/08-nextcloud-secret-sealed.yml
 ```
 
+#### Vaultwarden
+
+```bash
+kubectl create secret generic vaultwarden-admin \
+    --output=yaml \
+    --dry-run=client \
+    --namespace=vaultwarden \
+    --from-literal=ADMIN_TOKEN=helloworld \
+    --from-literal=SMTP_USERNAME=admin@example.com \
+    --from-literal=SMTP_PASSWORD=helloworld \
+    | kubeseal -o yaml --cert=./inventory/homelab/group_vars/mytls.crt > ./manifests/apps/03-files/02-vaultwarden/02-sealed-secret.yml
+
+```
+
 ## Notes
 
 ### Ansible Vault
