@@ -1,2 +1,3 @@
 ---
 k3s_server_location: /var/lib/rancher/k3s
+extra_server_args: "--node-taint CriticalAddonsOnly=true:NoExecute --write-kubeconfig-mode=644 --disable traefik --flannel-backend=host-gw --etcd-expose-metrics=true"

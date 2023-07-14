@@ -1,3 +1,4 @@
 ---
 
 k3s_github_url: "https://github.com/k3s-io/k3s/releases/download"
+k3s_version: v1.23.9+k3s1
