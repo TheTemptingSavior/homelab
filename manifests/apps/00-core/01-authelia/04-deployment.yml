@@ -4,6 +4,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: authelia
+  namespace: authelia
   labels:
     app.kubernetes.io/name: authelia
     app.kubernetes.io/instance: authelia
@@ -127,4 +128,4 @@ spec:
             path: STORAGE_ENCRYPTION_KEY
       - name: authelia-config
         persistentVolumeClaim:
-          claimName: gitea-pvc
+          claimName: authelia-pvc
