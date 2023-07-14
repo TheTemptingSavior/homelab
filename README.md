@@ -65,6 +65,27 @@ kubectl create secret generic gitea-secret \
     | kubeseal -o yaml > ./manifests/apps/02-development/01-gitea/09-gitea-secret-sealed.yml
 ```
 
+#### Drone
+```bash
+kubectl create secret generic drone-secret \
+    --output=yaml \
+    --dry-run=client \
+    --namespace=drone \
+    --from-literal=DRONE_RPC_SECRET=helloworld \
+    --from-literal=DRONE_GITEA_CLIENT_ID=helloworld \
+    --from-literal=DRONE_GITEA_CLIENT_SECRET=helloworld \
+    | kubeseal -o yaml > ./manifests/apps/02-development/02-drone/02-secret-sealed.yml
+```
+
+```bash
+kubectl create secret generic drone-runner-secret \
+  --output=yaml \
+  --dry-run=client \
+  --namespace=drone \
+  --from-literal=DRONE_RPC_SECRET=helloworld \
+  | kubeseal -o yaml > ./manifests/apps/02-development/02-drone/10-runner-secret-sealed.yml
+```
+
 ## Notes
 
 ### Ansible Vault

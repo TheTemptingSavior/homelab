@@ -1,0 +1,18 @@
+---
+# Source: drone-runner-kube/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: drone-runner-kube
+  labels:
+    helm.sh/chart: drone-runner-kube-0.1.10
+    app.kubernetes.io/name: drone-runner-kube
+    app.kubernetes.io/instance: drone-runner-kube
+    app.kubernetes.io/component: drone-runner-kube
+    app.kubernetes.io/version: "1.0.0-rc.3"
+    app.kubernetes.io/managed-by: Helm
+data:
+
+  DRONE_NAMESPACE_DEFAULT: "drone-build"
+  DRONE_RPC_HOST: "drone"
+  DRONE_RPC_PROTO: "http"

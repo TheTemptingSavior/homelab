@@ -1,0 +1,24 @@
+---
+# Source: drone-runner-kube/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: drone-runner-kube
+  labels:
+    helm.sh/chart: drone-runner-kube-0.1.10
+    app.kubernetes.io/name: drone-runner-kube
+    app.kubernetes.io/instance: drone-runner-kube
+    app.kubernetes.io/component: drone-runner-kube
+    app.kubernetes.io/version: "1.0.0-rc.3"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - port: 3000
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: drone-runner-kube
+    app.kubernetes.io/instance: drone-runner-kube
+    app.kubernetes.io/component: drone-runner-kube
