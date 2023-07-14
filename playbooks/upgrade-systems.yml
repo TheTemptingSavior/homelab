@@ -1,8 +1,8 @@
 ---
 
-- name: "Uninstall K3S"
-  hosts: k3s_cluster
+- name: "Upgrade all systems"
+  hosts: "all"
   gather_facts: true
   become: true
   roles:
-    - role: ../roles/k3s/reset
+    - role: ../roles/upgrade_system
