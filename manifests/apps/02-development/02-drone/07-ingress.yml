@@ -1,0 +1,33 @@
+---
+# Source: drone/templates/ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: drone
+  namespace: drone
+  labels:
+    release: drone
+    helm.sh/chart: drone-0.6.1
+    app.kubernetes.io/name: drone
+    app.kubernetes.io/instance: drone
+    app.kubernetes.io/component: server
+    app.kubernetes.io/version: "2.12.1"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+spec:
+  tls:
+    - hosts:
+        - "drone.codekernel.co.uk"
+  rules:
+    - host: "drone.codekernel.co.uk"
+      http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: drone
+              port:
+                number: 8080

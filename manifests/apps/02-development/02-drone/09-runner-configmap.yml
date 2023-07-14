@@ -1,0 +1,19 @@
+---
+# Source: drone-runner-docker/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: drone-runner-docker
+  namespace: drone
+  labels:
+    release: drone-runner-docker
+    helm.sh/chart: drone-runner-docker-0.4.0
+    app.kubernetes.io/name: drone-runner-docker
+    app.kubernetes.io/instance: drone-runner-docker
+    app.kubernetes.io/version: "1.8.1"
+    app.kubernetes.io/managed-by: Helm
+data:
+
+  DOCKER_HOST: "tcp://localhost:2375"
+  DRONE_RPC_HOST: "drone:8080"
+  DRONE_RPC_PROTO: "http"
