@@ -1,0 +1,37 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: authelia-backup
+  namespace: authelia
+data:
+  script.sh: |
+    #!/bin/bash
+    export RESTIC_PASSWORD_FILE=/etc/restic/restic-pw.txt
+
+    HOST=k3s-cluster
+    CACHE=/restic-cache
+
+    restic --repo b2:theredkingdom-k3s \
+           --cache /restic-cache \
+
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: authelia-backup
+  namespace: authelia
+spec:
+  schedule: "0 0 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: backup-container
+            image: ubuntu:22.04
+            imagePullPolicy: IfNotPresent
+            command:
+            - /bin/sh
+            - /script.sh
+          restartPolicy: OnFailure

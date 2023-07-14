@@ -1,0 +1,17 @@
+---
+# Source: authelia/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: mosquitto-service
+  namespace: homeassistant
+spec:
+  sessionAffinity: None
+  selector:
+    name: mosquitto
+  type: LoadBalancer
+  ports:
+    - name: mqtt
+      protocol: TCP
+      port: 1883
+      targetPort: 1883
