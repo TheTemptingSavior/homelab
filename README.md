@@ -50,6 +50,7 @@ export SECRETNAME="mycustomkeys"
 openssl req -x509 \
             -nodes \
             -newkey rsa:4096 \
+            -days 3650 \
             -keyout "$PRIVATEKEY" \
             -out "$PUBLICKEY" \
             -subj "/CN=sealed-secret/O=sealed-secret"
@@ -211,4 +212,15 @@ The encrypted variables in the vars file can be created with the following
         --vault-password-file=.vault-password \
         --name='the_secret' \
         'super_secret_thing'
+```
+
+### Get Your Certificate Back
+
+```bash
+ ansible master \
+      --vault-password-file=.vault-password \
+      -i ./inventory/homelab/hosts.ini \
+      -m debug \
+      -a 'var=sealed_secrets_crt'
+ echo "<base64 encoded secret here>" | base64 -d > ./inventory/homelab/group_vars/mytls.crt
 ```
