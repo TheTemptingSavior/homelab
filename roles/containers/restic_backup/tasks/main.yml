@@ -1,5 +1,10 @@
 ---
 
+- name: "Fail if no hostname is provided"
+  ansible.builtin.fail:
+    msg: "Could not determine node hostname"
+  when: node_hostname is not defined
+
 - name: "Add extra backup paths"
   ansible.builtin.set_fact:
     restic_backup_directories: _restic_backup_directories + restic_extra_directories
@@ -18,7 +23,7 @@
       PUID: "1000"
       PGID: "1000"
       RESTIC_REPOSITORY: "{{ restic_repository }}"
-      RESTIC_HOSTNAME: "{{ restic_hostname }}"
+      RESTIC_HOSTNAME: "{{ node_hostname }}"
       RESTIC_OPTIONAL_ARGS: "{{ restic_backup_args }}"
       RESTIC_OPTIONAL_BACKUP_ARGS: "{{ restic_optional_backup_args }}"
       RESTIC_PASSWORD: "{{ restic_password }}"
