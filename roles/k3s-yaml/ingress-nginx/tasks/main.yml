@@ -38,3 +38,13 @@
     kubeconfig: "/home/{{ ansible_user }}/.kube/config"
     template: test-deployment.yml
     namespace: test
+
+- name: Wait for test deployment to be deployed
+  kubernetes.core.k8s_info:
+    kubeconfig: "/home/{{ ansible_user }}/.kube/config"
+    kind: Deployment
+    wait: yes
+    name: test-nginx-app
+    namespace: test
+    wait_sleep: 10
+    wait_timeout: 360

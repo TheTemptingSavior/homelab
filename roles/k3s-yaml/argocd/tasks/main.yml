@@ -21,6 +21,17 @@
     template: ingress.yml
     namespace: argocd
 
+- name: Wait for ArgoCD to be deployed
+  kubernetes.core.k8s_info:
+    kubeconfig: "/home/{{ ansible_user }}/.kube/config"
+    kind: Deployment
+    wait: yes
+    name: argocd-server
+    namespace: argocd
+    wait_sleep: 10
+    wait_timeout: 360
+
+
 - name: ArgoCD admin secret
   debug:
     msg: "Run the following to get the login for ArgoCD:\nkubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath=\"{.data.password}\" | base64 -d; echo"

@@ -1,5 +1,9 @@
 # Build a Kubernetes cluster using k3s via Ansible
 
+## Notes
+- Chosen `flannel` backend is `host-gw`. This is because there are known issues with the `externalTrafficPolicy` being
+  set to `local` when using `ingress-nginx` and getting the real IPs of remote clients
+
 ## Usage
 
 ```bash
