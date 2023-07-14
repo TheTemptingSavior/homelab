@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: docker.io/nginx:alpine
+          image: traefik/whoami
           imagePullPolicy: Always
           ports:
             - containerPort: 80
