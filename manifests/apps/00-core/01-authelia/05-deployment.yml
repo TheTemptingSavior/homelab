@@ -133,5 +133,5 @@ spec:
           - key: STORAGE_ENCRYPTION_KEY
             path: STORAGE_ENCRYPTION_KEY
       - name: authelia-config
-        persistentVolumeClaim:
-          claimName: authelia-pvc
+        hostPath:
+          path: /mnt/gluster/gluster/core/authelia/data

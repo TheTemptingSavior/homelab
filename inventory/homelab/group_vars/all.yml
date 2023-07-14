@@ -7,6 +7,12 @@ extra_server_args: "--node-taint CriticalAddonsOnly=true:NoExecute --write-kubec
 extra_agent_args: ""
 custom_registries: "yes"
 
+# Gluster setup
+gluster_mount_dir: /mnt/gluster/gluster
+gluster_brick_dir: /mnt/gluster/brick
+gluster_brick_name: gluster
+
+
 email_address: !vault |
           $ANSIBLE_VAULT;1.1;AES256
           33373164623064306537333832313837343164383463393132333261386163343539366639383766

@@ -32,5 +32,5 @@ spec:
           name: nextcloud-data
       volumes:
       - name: nextcloud-data
-        persistentVolumeClaim:
-          claimName: nextcloud-data-pvc
+        hostPath:
+          path: /mnt/gluster/gluster/files/nextcloud/nextcloud-data

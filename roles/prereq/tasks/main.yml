@@ -69,6 +69,14 @@
 - name: Run apt upgrade
   apt: upgrade=dist force_apt_get=yes
 
+- name: Ensure K3S directory exists
+  ansible.builtin.file:
+    path: /etc/rancher/k3s
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
 - name: Create custom registries file
   template:
     src: registries.yaml.j2

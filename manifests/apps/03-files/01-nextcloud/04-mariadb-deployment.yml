@@ -30,5 +30,5 @@ spec:
               name: mariadb
       volumes:
         - name: mariadb
-          persistentVolumeClaim:
-            claimName: nextcloud-mariadb-pvc
+          hostPath:
+            path: /mnt/gluster/gluster/files/nextcloud/mariadb
