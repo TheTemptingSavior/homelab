@@ -31,8 +31,8 @@ spec:
           subPath: config.php
       volumes:
       - name: kanboard-data
-        persistentVolumeClaim:
-          claimName: kanboard-pvc
+        hostPath:
+          path: /mnt/gluster/gluster/development/kanboard/data
       - name: kanboard-config
         configMap:
           name: kanboard-configmap

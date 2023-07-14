@@ -31,8 +31,8 @@ spec:
           subPath: configuration.yaml
       volumes:
       - name: config-data
-        persistentVolumeClaim:
-          claimName: homeassistant-pvc
+        hostPath:
+          path: /mnt/gluster/gluster/automation/homeassistant/homeassistant
       - name: config-file
         configMap:
           name: homeassistant-config

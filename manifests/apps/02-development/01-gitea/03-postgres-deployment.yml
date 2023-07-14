@@ -30,5 +30,5 @@ spec:
               name: postgredb
       volumes:
         - name: postgredb
-          persistentVolumeClaim:
-            claimName: gitea-postgres-pvc
+          hostPath:
+            path: /mnt/gluster/gluster/development/gitea/postgres

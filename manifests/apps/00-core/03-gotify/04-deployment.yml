@@ -29,5 +29,5 @@ spec:
           name: gotify-data
       volumes:
       - name: gotify-data
-        persistentVolumeClaim:
-          claimName: gotify-pvc
+        hostPath:
+          path: /mnt/gluster/gluster/core/gotify/data

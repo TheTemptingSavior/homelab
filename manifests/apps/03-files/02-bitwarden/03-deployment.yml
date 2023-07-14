@@ -27,5 +27,5 @@ spec:
           name: vaultwarden-data
       volumes:
       - name: vaultwarden-data
-        persistentVolumeClaim:
-          claimName: vaultwarden-pvc
+        hostPath:
+          path: /mnt/gluster/gluster/files/bitwarden

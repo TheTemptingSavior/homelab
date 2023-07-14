@@ -28,8 +28,8 @@ spec:
           name: persistent-data
       volumes:
       - name: persistent-data
-        persistentVolumeClaim:
-          claimName: mqtt-pvc
+        hostPath:
+          path: /mnt/gluster/gluster/automation/homeassistant/mosquitto
       - name: config-file
         configMap:
           name: mqtt-config

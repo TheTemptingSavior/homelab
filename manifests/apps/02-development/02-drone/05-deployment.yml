@@ -66,5 +66,5 @@ spec:
               subPath: ""
       volumes:
         - name: storage-volume
-          persistentVolumeClaim:
-            claimName: drone
+          hostPath:
+            path: /mnt/gluster/gluster/development/drone

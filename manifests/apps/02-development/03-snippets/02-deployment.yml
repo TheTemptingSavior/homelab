@@ -27,5 +27,5 @@ spec:
           name: snippets-data
       volumes:
       - name: snippets-data
-        persistentVolumeClaim:
-          claimName: snippets-pvc
+        hostPath:
+          path: /mnt/gluster/gluster/development/snippets
