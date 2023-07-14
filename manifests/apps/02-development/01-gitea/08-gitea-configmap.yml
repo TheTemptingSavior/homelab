@@ -1,0 +1,28 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gitea-config
+  namespace: gitea
+  labels:
+    app: gitea
+data:
+  GITEA__database__DB_TYPE: "postgres"
+  GITEA__database__HOST: "postgres.gitea.svc.cluster.local:5432"
+  GITEA__database__NAME: "gitea"
+  GITEA__database__USER: "gitea"
+  GITEA__cache__ENABLED: "true"
+  GITEA__cache__ADAPTER: "redis"
+  GITEA__cache__HOST: "redis://redis.gitea.svc.cluster.local:6379/0?pool_size=100&idle_timeout=180s"
+  GITEA__session__PROVIDER: "redis"
+  GITEA__session__PROVIDER_CONFIG: "redis://redis.gitea.svc.cluster.local:6379/1?pool_size=100&idle_timeout=180s"
+  GITEA__ui__DEFAULT_THEME: "arc-green"
+  GITEA__server__START_SSH_SERVER: "true"
+  GITEA__server__SSH_PORT: "2222"
+  GITEA__server__SSH_LISTEN_PORT: "2222"
+  GITEA__server__SSH_DOMAIN: "git.codekernel.co.uk"
+  GITEA__server__OFFLINE_MODE: "true"
+  GITEA__server__ENABLE_GZIP: "true"
+  GITEA__server__LFS_START_SERVER: "true"
+  GITEA__server__PROTOCOL: "https"
+  GITEA__server__DOMAIN: "git.codekernel.co.uk"
