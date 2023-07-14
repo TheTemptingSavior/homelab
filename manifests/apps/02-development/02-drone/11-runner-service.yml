@@ -1,0 +1,24 @@
+---
+# Source: drone-runner-docker/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: drone-runner-docker
+  namespace: drone
+  labels:
+    release: drone-runner-docker
+    helm.sh/chart: drone-runner-docker-0.4.0
+    app.kubernetes.io/name: drone-runner-docker
+    app.kubernetes.io/instance: drone-runner-docker
+    app.kubernetes.io/version: "1.8.1"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: drone-runner-docker
+    app.kubernetes.io/instance: drone-runner-docker
