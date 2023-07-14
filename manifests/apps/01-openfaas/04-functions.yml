@@ -2,15 +2,6 @@
 apiVersion: openfaas.com/v1
 kind: Function
 metadata:
-  name: identicon
-  namespace: openfaas-fn
-spec:
-  name: identicon
-  image: rgee0/identicon
----
-apiVersion: openfaas.com/v1
-kind: Function
-metadata:
   name: nodeinfo
   namespace: openfaas-fn
 spec:
