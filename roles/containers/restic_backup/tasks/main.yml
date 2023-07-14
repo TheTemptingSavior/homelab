@@ -1,0 +1,28 @@
+---
+
+- name: "Add extra backup paths"
+  ansible.builtin.set_fact:
+    restic_backup_directories: _restic_backup_directories + restic_extra_directories
+  when: restic_backup_directories is not defined and restic_extra_directories is defined
+
+- name: "Set default restic directories"
+  ansible.builtin.set_fact:
+    restic_backup_directories: _restic_backup_directories
+  when: restic_backup_directories is not defined and restic_extra_directories is not defined
+
+- name: "Create restic backup container"
+  community.docker.docker_container:
+    name: "restic-backup"
+    image: "registry.digitalocean.com/theredkingdom/restic-cron"
+    env:
+      PUID: "1000"
+      PGID: "1000"
+      RESTIC_REPOSITORY: "{{ restic_repository }}"
+      RESTIC_HOSTNAME: "{{ restic_hostname }}"
+      RESTIC_OPTIONAL_ARGS: "{{ restic_backup_args }}"
+      RESTIC_OPTIONAL_BACKUP_ARGS: "{{ restic_optional_backup_args }}"
+      RESTIC_PASSWORD: "{{ restic_password }}"
+      B2_ACCOUNT_ID: "{{ restic_b2_account_id }}"
+      B2_ACCOUNT_KEY: "{{ restic_b2_account_key }}"
+      GOTIFY_TOKEN: "{{ restic_gotify_token }}"
+    volumes: restic_backup_directories

@@ -1,0 +1,32 @@
+---
+
+- name: "Create JellyFin volume directories"
+  ansible.builtin.file:
+    path: "/home/{{ ansible_user }}/jellyfin/config"
+    state: "directory"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0755"
+
+- name: "Stat the mounted directories"
+  ansible.builtin.command:
+    cmd: mountpoint -q /dospace
+  register: _dospace_directory
+  ignore_errors: true
+
+- name: "Create JellyFin container"
+  community.docker.docker_container:
+    name: "jellyfin"
+    image: "lscr.io/linuxserver/jellyfin"
+    start: "started"
+    restart: true
+    ports:
+      - "8096:8096"
+    env:
+      PUID: "{{ jellyfin_puid }}"
+      PGID: "{{ jellyfin_pgid }}"
+      TZ: "{{ jellyfin_tz }}"
+    volumes:
+      - "/home/{{ ansible_user }}/jellyfin/config:/config"
+      - "/dospace/music:/music:ro"
+  when: _dospace_directory.rc == 0

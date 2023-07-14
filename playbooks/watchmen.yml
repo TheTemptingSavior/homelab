@@ -1,6 +1,6 @@
 ---
 
-- name: "Upgrade all systems"
+- name: "Bootstrap the watchmen"
   hosts: watchmen
   gather_facts: true
   become: true
@@ -8,3 +8,5 @@
     - role: ../roles/upgrade_system
     - { role: ../roles/wireguard, is_server: true }
     - { role: ../roles/do_spaces }
+    - { role: ../roles/containers/jellyfin_music }
+    - { role: ../roles/containers/restic_backup }

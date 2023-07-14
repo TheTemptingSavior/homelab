@@ -1,0 +1,5 @@
+---
+
+jellyfin_puid: "1000"
+jellyfin_pgid: "1000"
+jellyfin_tz: "Europe/London"

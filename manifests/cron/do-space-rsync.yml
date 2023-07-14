@@ -1,0 +1,57 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: do-space-rsync-backup-script
+  namespace: cron-jobs
+data:
+  script.sh: |
+    #!/bin/bash
+    set -e -x
+    
+    # Install rsync
+    apt-get update && apt-get install -y rsync rclone
+    
+    # Verify that we got our UnRAID mountpoint
+    mountpoint /media && stat /media/Music
+    
+
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: do-space-rsync
+  namespace: cron-jobs
+spec:
+  schedule: "* * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: do-space-rsync
+              image: ubuntu:latest
+              imagePullPolicy: always
+              restartPolicy: OnFailure
+              command:
+                - /bin/bash
+                - /script.sh
+              volumeMounts:
+                - mountPath: /script.sh
+                  name: backup-script
+                  readOnly: true
+                  subPath: script.sh
+                - mountPath: /media
+                  name: media
+          volumes:
+            - name: backup-script
+              configMap:
+                name: do-space-rsync-backup-script
+                items:
+                  - key: script.sh
+                    path: script.sh
+            - name: media
+              nfs:
+                server: 192.168.57.2
+                path: /mnt/user/media
+                readOnly: true

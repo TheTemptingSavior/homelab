@@ -1,0 +1,14 @@
+---
+
+restic_repository: ""
+restic_hostname: ""
+restic_backup_args: ""
+restic_optional_backup_args: ""
+restic_password: ""
+restic_b2_account_id: ""
+restic_b2_account_key: ""
+restic_gotify_token: ""
+_restic_backup_directories:
+  - "/etc:/data/etc:ro"
+  - "/home/{{ ansible_user }}:/data/home/{{ ansible_user }}:ro"
+  - "/home/{{ ansible_user }}/restic:/config"
