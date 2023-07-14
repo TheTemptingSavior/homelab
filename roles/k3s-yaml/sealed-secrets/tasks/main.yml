@@ -6,3 +6,13 @@
     kubeconfig: "/home/{{ ansible_user }}/.kube/config"
     template: sealed-secrets.yml
     namespace: kube-system
+
+- name: Waiting for sealed-secrets to be deployed
+  kubernetes.core.k8s_info:
+    kubeconfig: "/home/{{ ansible_user }}/.kube/config"
+    kind: Deployment
+    wait: yes
+    name: "sealed-secrets-controller"
+    namespace: kube-system
+    wait_sleep: 10
+    wait_timeout: 360
