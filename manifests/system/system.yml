@@ -20,6 +20,26 @@ spec:
   - '*'
 ---
 apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: monitoring
+  namespace: argocd
+  # Finalizer that ensures that project is not deleted until it is not referenced by any
+  # application
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  description: Cluster monitoring services
+  clusterResourceWhitelist:
+  - group: '*'
+    kind: '*'
+  destinations:
+  - namespace: '*'
+    server: '*'
+  sourceRepos:
+  - '*'
+---
+apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: rancher
@@ -33,7 +53,7 @@ spec:
   project: system
   source:
     path: manifests/system/01-rancher
-    repoURL: https://
+    repoURL: https://github.com/TheTemptingSavior/homelab
     targetRevision: HEAD
 ---
 apiVersion: argoproj.io/v1alpha1
@@ -50,5 +70,100 @@ spec:
   project: system
   source:
     path: manifests/system/02-longhorn
-    repoURL: https://
+    repoURL: https://github.com/TheTemptingSavior/homelab
     targetRevision: HEAD
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: monitoring-namespace
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
+  finalizers:
+    - resources-finalizer.argovd.argoproj.io
+spec:
+  destination:
+    namespace: default
+    server: https://kubernetes.default.svc
+  project: monitoring
+  source:
+    path: manifests/system/03-monitoring/00-namespace
+    repoURL: https://github.com/TheTemptingSavior/homelab
+    targetRevision: monitoring-app
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: prometheus-operator
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+  finalizers:
+    - resources-finalizer.argovd.argoproj.io
+spec:
+  destination:
+    namespace: monitoring
+    server: https://kubernetes.default.svc
+  project: monitoring
+  source:
+    path: manifests/system/03-monitoring/01-operator
+    repoURL: https://github.com/TheTemptingSavior/homelab
+    targetRevision: monitoring-app
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: monitors
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+  finalizers:
+    - resources-finalizer.argovd.argoproj.io
+spec:
+  destination:
+    namespace: monitoring
+    server: https://kubernetes.default.svc
+  project: monitoring
+  source:
+    path: manifests/system/03-monitoring/02-monitors
+    repoURL: https://github.com/TheTemptingSavior/homelab
+    targetRevision: monitoring-app
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: prometheus
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+  finalizers:
+    - resources-finalizer.argovd.argoproj.io
+spec:
+  destination:
+    namespace: monitoring
+    server: https://kubernetes.default.svc
+  project: monitoring
+  source:
+    path: manifests/system/03-monitoring/02-prometheus
+    repoURL: https://github.com/TheTemptingSavior/homelab
+    targetRevision: monitoring-app
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: grafana
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "4"
+  finalizers:
+    - resources-finalizer.argovd.argoproj.io
+spec:
+  destination:
+    namespace: monitoring
+    server: https://kubernetes.default.svc
+  project: monitoring
+  source:
+    path: manifests/system/03-monitoring/04-grafana
+    repoURL: https://github.com/TheTemptingSavior/homelab
+    targetRevision: monitoring-app
