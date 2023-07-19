@@ -1,0 +1,23 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: prometheus-ingress
+  namespace: monitoring
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/whitelist-source-range: "192.168.56.0/21,192.168.65.0/24"
+spec:
+  rules:
+  - host: prometheus.codekernel.co.uk
+    http:
+      paths:
+      - backend:
+          service:
+            name: prometheus-persistent
+            port:
+              number: 9090
+        pathType: ImplementationSpecific
+  tls:
+  - hosts:
+    - prometheus.codekernel.co.uk
