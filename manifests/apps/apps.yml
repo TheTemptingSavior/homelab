@@ -269,19 +269,3 @@ spec:
     path: manifests/apps/03-files/03-archivebox
     repoURL: https://github.com/TheTemptingSavior/homelab
     targetRevision: HEAD
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: bookstack
-  namespace: argocd
-  finalizers:
-  - resources-finalizer.argocd.argoproj.io
-spec:
-  destination:
-    server: https://kubernetes.default.svc
-  project: files
-  source:
-    path: manifests/apps/03-files/04-bookstack
-    repoURL: https://github.com/TheTemptingSavior/homelab
-    targetRevision: HEAD
